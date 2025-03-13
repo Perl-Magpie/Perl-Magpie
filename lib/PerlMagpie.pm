@@ -1,7 +1,8 @@
 package PerlMagpie;
-use Dancer2;
+use Modern::Perl;
+use Dancer2 appname => 'PerlMagpie';
 
-our $VERSION = '0.1';
+use PerlMagpie::Metabase;
 
 get '/' => sub {
     template 'index' => { 'title' => 'PerlMagpie' };
