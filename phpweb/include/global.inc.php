@@ -5,8 +5,7 @@ function db_init() {
 	$ini_file = "/home/bakers/db/magpie.ini";
 
 	if (!is_readable($ini_file)) {
-		// Cannot user error_out() we don't have sluz yet
-		die("Unable to read DB credentials from <code>$ini_file</code>");
+		error_out("Unable to read DB credentials from <code>$ini_file</code>", 98573);
 	}
 
 	$x   = parse_ini_file("/home/bakers/db/magpie.ini", true);
