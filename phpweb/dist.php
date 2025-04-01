@@ -163,7 +163,7 @@ function get_test_results($dist, $version, $time) {
 
 	$time_str = date("Y-m-d H:i:s", $time);
 
-	$sql = "SELECT archname, distribution, grade, guid, osname, perl_version, tester, EXTRACT(EPOCH FROM test_ts) as unixtime, tester.name as tester_name
+	$sql = "SELECT archname, distribution, grade, guid, osname, perl_version, tester, EXTRACT(EPOCH FROM test_ts) as unixtime, tester.name as tester_name, octet_length(text_report) as x_test_bytes
 		FROM test
 		INNER JOIN tester ON (test.tester = tester.uuid)
 		WHERE test_ts > ? AND distribution = ? AND dist_version = ?
