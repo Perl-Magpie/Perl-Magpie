@@ -160,11 +160,14 @@ function fetch_test_body_from_cpt($uuid) {
 	$ckey = "uuid:$uuid";
 	$data = $GLOBALS['mc']->get($ckey);
 
+	$curl_errno = 0;
+	$http_code  = 0;
+
 	if ($data) {
 		$GLOBALS['FROM_CACHE'] = true;
 		$body                  = $data;
 	} else {
-		$body = http_get_with_timeout($url, 2);
+		$body = http_get_with_timeout($url, 2, $curl_errno, $http_code);
 		$body = trim($body);
 
 		if (strlen($body) > 256) {
@@ -180,7 +183,13 @@ function fetch_test_body_from_cpt($uuid) {
 
 	$ms = intval((microtime(1) - $start) * 1000);
 
-	mplog("Fetched $uuid from CPT in $ms ms");
+	if ($curl_errno == 28) {
+		mplog("Timeout fetching $uuid from CPT after $ms ms");
+	} elseif ($http_code != 200) {
+		mplog("Non-OK HTTP code $http_code fetching $uuid from CPT");
+	} else {
+		mplog("Fetched $uuid from CPT in $ms ms");
+	}
 
 	if (strlen($ret) > 256) {
 		$ok = write_test_to_db($uuid, $ret);
@@ -190,7 +199,7 @@ function fetch_test_body_from_cpt($uuid) {
 }
 
 // Fetch HTML from a remote URL
-function http_get_with_timeout(string $url, int $timeout) {
+function http_get_with_timeout(string $url, int $timeout, &$curl_errno, &$http_code) {
 	$ch = curl_init();
 
 	curl_setopt_array($ch, [
@@ -203,10 +212,11 @@ function http_get_with_timeout(string $url, int $timeout) {
 		CURLOPT_USERAGENT      => 'Perl Magpie Client'
 	]);
 
-	$response  = curl_exec($ch);
-	$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+	$response   = curl_exec($ch);
+	$http_code  = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+	$curl_errno = curl_errno($ch);
 
-	if (curl_errno($ch)) {
+	if ($curl_errno) {
 		$ret = "???";
 
 		if (curl_errno($ch) == 28) {
