@@ -139,10 +139,20 @@ function get_test_info($uuid) {
 
 	// The text_report field is brotli compressed in the DB
 	$raw = $ret['text_report'];
-	$str = stream_get_contents($raw);
-	$str = @brotli_uncompress($str);
+	$bro = stream_get_contents($raw);
+	$str = @brotli_uncompress($bro);
+
+	// Brotli uncompress failed
+	if ($str === false) {
+		$str = "";
+	}
 
 	$ret['text_report'] = trim($str);
+
+	$db_len = strlen($bro);
+	if (($db_len > 0) && (strlen($str) == 0)) {
+		mplog("$db_len bytes in DB but is not valid brotli");
+	}
 
 	// If we don't have the text report in the DB we fetch it via HTTP from CPT
 	if (!$ret['text_report']) {
@@ -189,9 +199,6 @@ function fetch_test_body_from_cpt($uuid) {
 		mplog("Non-OK HTTP code $http_code fetching $uuid from CPT");
 	} else {
 		mplog("Fetched $uuid from CPT in $ms ms");
-	}
-
-	if (strlen($ret) > 256) {
 		$ok = write_test_to_db($uuid, $ret);
 	}
 
