@@ -1,0 +1,3 @@
+{include file='tpls/header.stpl'}
+
+<p>Hello {$first} {$last}</p>

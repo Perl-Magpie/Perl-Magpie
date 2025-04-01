@@ -1,0 +1,9 @@
+<ul>
+{foreach $turtles as $name}
+	<li>{$name}</li>
+{/foreach}
+</ul>
+
+{foreach $numbers as $english => $spanish}
+<div>{$english} => {$spanish}</div>
+{/foreach}
