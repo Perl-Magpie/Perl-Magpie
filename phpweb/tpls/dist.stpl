@@ -25,7 +25,7 @@
 
 		<div class="container-lg">
 			<h4><b>{$result_count}</b> results found</h4>
-			<table class="w-100 table border table-sm">
+			<table class="w-100 table border table-sm" style="table-layout: fixed">
 				<thead class="table-succes magpie_header">
 					<tr class="">
 						<th class="pver_col"><a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests">Perl Version</a></th>

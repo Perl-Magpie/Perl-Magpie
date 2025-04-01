@@ -19,7 +19,7 @@
 }
 
 .pver_col {
-	min-width: 10%;
+	width: 10%;
 }
 
 .dist_table_header th, .magpie_header, .magpie_header th {
@@ -31,10 +31,7 @@
 	color: #e0dfff;
 }
 
-.os_col {
-	/* If we set this SMALLER than is remaining they auto-fill and make the columns equal width */
-	min-width: 18%;
-}
+.os_col { }
 
 .font-scp {
 	font-family: "Source Code Pro";
