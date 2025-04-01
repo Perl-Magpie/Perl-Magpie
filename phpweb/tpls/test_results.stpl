@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>{$info.distribution|dist_to_human} {$info.dist_version}</title>
+		<link href="/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+		<link href="/css/dist.css" rel="stylesheet">
+
+		<script type="text/javascript" src="/js/jquery.min.js"></script>
+	</head>
+	<body class="">
+		{$debug_output}
+
+		<h1 class="border-bottom mx-0 px-3 magpie_header pb-2 mb-3 row">
+			<div class="col-11 ps-0">
+				<a class="text-decoration-none" href="dist.php?dist={$info.distribution|dist_to_human}&version={$info.dist_version}"><b>{$info.distribution|dist_to_human}</b> {$info.dist_version}</a>
+			</div>
+			<div class="col-1 pe-0 text-end">
+				<a href="/" class="text-decoration-none"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+					<path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
+				</svg></a>
+			</div>
+		</h1>
+
+		<div class="container-lg">
+			<table class="table table-sm dist_table_header">
+				<thead>
+					<tr>
+						<th>Perl Version</th>
+						<th>OS</th>
+						<th>Test Time</th>
+						<th>Tester</th>
+						<th>Grade</th>
+					</tr>
+				</thead>
+				<tbody class="table-group-divider">
+					<tr>
+						<td>{$info.perl_version}</td>
+						<td>{$info.osname|os_normalize}</td>
+						<td>{$info.test_unixtime|format_date}</td>
+						<td>{$info.tester_name}</td>
+						<td class="status_{$info.grade|strtolower}">{$info.grade}</td>
+					</tr>
+				</tbody>
+			</table>
+
+			{if $cached}<div class="alert alert-success fw-bold p-2">Test body is cached</div>{/if}
+			<pre class="border bg-light p-2 font-scp">{$test_str}</pre>
+		</div>
+	</body>
+</html>

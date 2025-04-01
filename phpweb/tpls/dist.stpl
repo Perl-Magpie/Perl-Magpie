@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Results for {$dist_fmt} {$dist_ver}</title>
+		<link href="/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+		<link href="/css/dist.css" rel="stylesheet">
+
+		<script type="text/javascript" src="/js/jquery.min.js"></script>
+	</head>
+	<body class="">
+		{$debug_output}
+
+		<h1 class="border-bottom mx-0 px-3 magpie_header pb-2 mb-3 row">
+			<div class="col-11 ps-0">
+				Test Results for <a class="text-decoration-none" href="dist.php?dist={$dist_fmt}&version={$dist_ver}"><b>{$dist_fmt} {$dist_ver}</b></a>
+			</div>
+			<div class="col-1 pe-0 text-end">
+				<a href="/" class="text-decoration-none"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+					<path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
+				</svg></a>
+			</div>
+		</h1>
+
+		<div class="container-lg">
+			<h4><b>{$result_count}</b> results found</h4>
+			<table class="w-100 table border table-sm">
+				<thead class="table-succes magpie_header">
+					<tr class="">
+						<th class="pver_col"><a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests">Perl Version</a></th>
+						<th class="os_col text-center os_linux"><a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter=Linux">Linux</a></th>
+						<th class="os_col text-center os_bsd"><a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter=BSD">BSD</a></th>
+						{if $os_count.darwin}
+						<th class="os_col text-center os_darwin"><a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter=Darwin">Darwin</a></th>
+						{/if}
+						{if $os_count.windows}
+						<th class="os_col text-center os_windows"><a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter=Windows">Windows</a></th>
+						{/if}
+					</tr>
+				</thead>
+				<tbody class="table-group-divider">
+				{foreach $results as $pv => $x}
+					<tr>
+						<td class=""><a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter={$pv}">{$pv}</a></td>
+						<td class="text-center os_linux">
+							<a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter={$pv};Linux">
+							<div class="d-flex">
+								{if $x.linux.PASS}<div class="status_pass" style="width: {$x.linux.PASS}%">&nbsp;</div>{/if}
+								{if $x.linux.FAIL}<div class="status_fail" style="width: {$x.linux.FAIL}%">&nbsp;</div>{/if}
+								{if $x.linux.UNKNOWN}<div class="status_unknown" style="width: {$x.linux.UNKNOWN}%">&nbsp;</div>{/if}
+								{if $x.linux.NA}<div class="status_na" style="width: {$x.linux.NA}%">&nbsp;</div>{/if}
+							</div>
+							</a>
+						</td>
+						<td class="text-center os_bsd">
+							<a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter={$pv};BSD">
+							<div class="d-flex">
+								{if $x.bsd.PASS}<div class="status_pass" style="width: {$x.bsd.PASS}%">&nbsp;</div>{/if}
+								{if $x.bsd.FAIL}<div class="status_fail" style="width: {$x.bsd.FAIL}%">&nbsp;</div>{/if}
+								{if $x.bsd.UNKNOWN}<div class="status_unknown" style="width: {$x.bsd.UNKNOWN}%">&nbsp;</div>{/if}
+								{if $x.bsd.NA}<div class="status_na" style="width: {$x.bsd.NA}%">&nbsp;</div>{/if}
+							</div>
+							</a>
+						</td>
+						{if $os_count.darwin}
+						<td class="text-center os_darwin">
+							<a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter={$pv};Darwin">
+							<div class="d-flex">
+								{if $x.darwin.PASS}<div class="status_pass" style="width: {$x.darwin.PASS}%">&nbsp;</div>{/if}
+								{if $x.darwin.FAIL}<div class="status_fail" style="width: {$x.darwin.FAIL}%">&nbsp;</div>{/if}
+								{if $x.darwin.UNKNOWN}<div class="status_unknown" style="width: {$x.darwin.UNKNOWN}%">&nbsp;</div>{/if}
+								{if $x.darwin.NA}<div class="status_na" style="width: {$x.darwin.NA}%">&nbsp;</div>{/if}
+							</div>
+							</a>
+						</td>
+						{/if}
+						{if $os_count.windows}
+						<td class="text-center os_windows">
+							<a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter={$pv};Windows">
+							<div class="d-flex">
+								{if $x.windows.PASS}<div class="status_pass" style="width: {$x.windows.PASS}%">&nbsp;</div>{/if}
+								{if $x.windows.FAIL}<div class="status_fail" style="width: {$x.windows.FAIL}%">&nbsp;</div>{/if}
+								{if $x.windows.UNKNOWN}<div class="status_unknown" style="width: {$x.windows.UNKNOWN}%">&nbsp;</div>{/if}
+								{if $x.windows.NA}<div class="status_na" style="width: {$x.windows.NA}%">&nbsp;</div>{/if}
+							</div>
+							</a>
+						</td>
+						{/if}
+					</tr>
+				{/foreach}
+				</tbody>
+			</table>
+
+			<p class="mb-0"><b>Key:</b></p>
+			<div class="d-flex text-center fw-bold mb-2">
+				<div class="status_pass w-100">Pass: {$grade_count.PASS}</div>
+				<div class="status_fail w-100 ms-1">Fail: {$grade_count.FAIL}</div>
+				<div class="status_na w-100 ms-1">N/A: {$grade_count.NA}</div>
+				<div class="status_unknown w-100 ms-1">Unknown: {$grade_count.UNKNOWN}</div>
+			</div>
+
+			<p class="mb-0"><b>Other versions:</b></p>
+			<ul>
+			{foreach $version_list as $ver}
+				{if $dist_ver != $ver}
+				<li><a href="?dist={$dist}&amp;version={$ver}">{$ver}</a></li>
+				{else}
+				<li><b>{$ver}</b></li>
+				{/if}
+			{/foreach}
+			</ul>
+
+			<div class="footer mb-2 text-end">
+				<a href="{$json_link}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-filetype-json" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14 4.5V11h-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM4.151 15.29a1.2 1.2 0 0 1-.111-.449h.764a.58.58 0 0 0 .255.384q.105.073.25.114.142.041.319.041.245 0 .413-.07a.56.56 0 0 0 .255-.193.5.5 0 0 0 .084-.29.39.39 0 0 0-.152-.326q-.152-.12-.463-.193l-.618-.143a1.7 1.7 0 0 1-.539-.214 1 1 0 0 1-.352-.367 1.1 1.1 0 0 1-.123-.524q0-.366.19-.639.192-.272.528-.422.337-.15.777-.149.456 0 .779.152.326.153.5.41.18.255.2.566h-.75a.56.56 0 0 0-.12-.258.6.6 0 0 0-.246-.181.9.9 0 0 0-.37-.068q-.324 0-.512.152a.47.47 0 0 0-.185.384q0 .18.144.3a1 1 0 0 0 .404.175l.621.143q.326.075.566.211a1 1 0 0 1 .375.358q.135.222.135.56 0 .37-.188.656a1.2 1.2 0 0 1-.539.439q-.351.158-.858.158-.381 0-.665-.09a1.4 1.4 0 0 1-.478-.252 1.1 1.1 0 0 1-.29-.375m-3.104-.033a1.3 1.3 0 0 1-.082-.466h.764a.6.6 0 0 0 .074.27.5.5 0 0 0 .454.246q.285 0 .422-.164.137-.165.137-.466v-2.745h.791v2.725q0 .66-.357 1.005-.355.345-.985.345a1.6 1.6 0 0 1-.568-.094 1.15 1.15 0 0 1-.407-.266 1.1 1.1 0 0 1-.243-.39m9.091-1.585v.522q0 .384-.117.641a.86.86 0 0 1-.322.387.9.9 0 0 1-.47.126.9.9 0 0 1-.47-.126.87.87 0 0 1-.32-.387 1.55 1.55 0 0 1-.117-.641v-.522q0-.386.117-.641a.87.87 0 0 1 .32-.387.87.87 0 0 1 .47-.129q.265 0 .47.129a.86.86 0 0 1 .322.387q.117.255.117.641m.803.519v-.513q0-.565-.205-.973a1.46 1.46 0 0 0-.59-.63q-.38-.22-.916-.22-.534 0-.92.22a1.44 1.44 0 0 0-.589.628q-.205.407-.205.975v.513q0 .562.205.973.205.407.589.626.386.217.92.217.536 0 .917-.217.384-.22.589-.626.204-.41.205-.973m1.29-.935v2.675h-.746v-3.999h.662l1.752 2.66h.032v-2.66h.75v4h-.656l-1.761-2.676z"/>
+				</svg></a>
+			</div>
+		</div>
+
+	</body>
+</html>

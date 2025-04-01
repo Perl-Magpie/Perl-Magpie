@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Memcache statistics</title>
+		<link href="/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+		<link href="/css/dist.css" rel="stylesheet">
+	</head>
+	<body class="">
+		{$debug_output}
+
+		<h1 class="border-bottom mx-0 px-3 bg-primary-subtle pb-2 mb-3">Memcache statistics</h1>
+
+		<div class="container-lg">
+			<table class="table dist_table_header">
+				<thead>
+					<tr>
+						<th>Bytes Sent</th>
+						<th>Bytes Received</th>
+						<th>Gets</th>
+						<th>Sets</th>
+						<th>Hits</th>
+						<th>Misses</th>
+						<th>Items in Cache</th>
+						<th>Memory Used</th>
+						<th>Memory per Item</th>
+						<th>Uptime</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{$stats.bytes_read|human_size}</td>
+						<td>{$stats.bytes_written|human_size}</td>
+						<td>{$stats.cmd_get}</td>
+						<td>{$stats.cmd_set}</td>
+						<td>{$stats.get_hits} ({$stats.hit_percent}%)</td>
+						<td>{$stats.get_misses} ({$stats.miss_percent}%)</td>
+						<td>{$stats.total_items}</td>
+						<td title="Total available: {$stats.limit_maxbytes|human_size}">{$stats.bytes|human_size} ({$stats.used_percent}%)</td>
+						<td>{$stats.avg_item_size}</td>
+						<td>{$stats.uptime|human_time}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>
