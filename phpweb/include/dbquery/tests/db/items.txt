@@ -1,0 +1,12 @@
+1|Chocolate Chips|2.76
+2|Canned Air|1.50
+3|Cheetos|2.15
+4|Grass Seed|15.79
+5|Coffee Mug|3.19
+6|Flash Drive|8.19
+7|Arduino|35.00
+8|CD Holder|8.10
+9|Microsoft Windows 8|115.64
+10|USB Cable|4.27
+11|Magnet|0.13
+12|Headphones|67.24
