@@ -1,0 +1,63 @@
+.status_pass {
+	background: lightgreen !important;
+	outline: 1px solid #45d545;
+}
+
+.status_fail {
+	background: pink !important;
+	outline: 1px solid #ff9797;
+}
+
+.status_unknown {
+	background: #ffdfd2 !important;
+	outline: 1px solid #ffbf99;
+}
+
+.status_na {
+	background: lightgray !important;
+	outline: 1px solid darkgray;
+}
+
+.pver_col {
+	min-width: 10%;
+}
+
+.dist_table_header th, .magpie_header, .magpie_header th {
+	background: #3c69ac !important; /* Magpie blue */
+	color: white;
+}
+
+.magpie_header a, h1 a {
+	color: #e0dfff;
+}
+
+.os_col {
+	/* If we set this SMALLER than is remaining they auto-fill and make the columns equal width */
+	min-width: 18%;
+}
+
+.font-scp {
+	font-family: "Source Code Pro";
+}
+
+/* Best monospace font EVAR! */
+/* http://blogs.adobe.com/typblography/2012/09/source-code-pro.html */
+@font-face {
+    font-family : 'Source Code Pro';
+    font-style  : normal;
+    font-weight : 400;
+    src         :
+        local('Source Code Pro'),
+        local('SourceCodePro-Regular'),
+        url('/css/fonts/source_code_pro/source_code_pro.woff') format('woff');
+}
+
+@font-face {
+    font-family : 'Source Code Pro';
+    font-style  : normal;
+    font-weight : 700;
+    src         :
+        local('Source Code Pro Bold'),
+        local('SourceCodePro-Bold'),
+        url('/css/fonts/source_code_pro/source_code_pro_bold.woff') format('woff');
+}
