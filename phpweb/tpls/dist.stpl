@@ -15,6 +15,13 @@
 		<h1 class="border-bottom mx-0 px-3 magpie_header pb-2 mb-3 row">
 			<div class="col-11 ps-0">
 				Test Results for <a class="text-decoration-none" href="dist.php?dist={$dist}&version={$dist_ver}"><b>{$dist} {$dist_ver}</b></a>
+
+				<a href="https://metacpan.org/dist/{$dist}">
+					<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+						<path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9q-.13 0-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+						<path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4 4 0 0 1-.82 1H12a3 3 0 1 0 0-6z"/>
+					</svg>
+				</a>
 			</div>
 			<div class="col-1 pe-0 text-end">
 				<a href="/" class="text-decoration-none"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
