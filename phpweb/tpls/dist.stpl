@@ -29,8 +29,13 @@
 				<thead class="table-succes magpie_header">
 					<tr class="">
 						<th class="pver_col"><a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests">Perl Version</a></th>
+						{if $os_count.linux}
 						<th class="os_col text-center os_linux"><a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter=Linux">Linux</a></th>
+						{/if}
+						{if $os_count.bsd}
 						<th class="os_col text-center os_bsd"><a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter=BSD">BSD</a></th>
+						{/if}
+
 						{if $os_count.darwin}
 						<th class="os_col text-center os_darwin"><a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter=Darwin">Darwin</a></th>
 						{/if}
@@ -43,6 +48,7 @@
 				{foreach $results as $pv => $x}
 					<tr>
 						<td class=""><a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter={$pv}">{$pv}</a></td>
+						{if $os_count.linux}
 						<td class="text-center os_linux">
 							<a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter={$pv};Linux">
 							<div class="d-flex">
@@ -53,6 +59,8 @@
 							</div>
 							</a>
 						</td>
+						{/if}
+						{if $os_count.bsd}
 						<td class="text-center os_bsd">
 							<a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter={$pv};BSD">
 							<div class="d-flex">
@@ -63,6 +71,7 @@
 							</div>
 							</a>
 						</td>
+						{/if}
 						{if $os_count.darwin}
 						<td class="text-center os_darwin">
 							<a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter={$pv};Darwin">
