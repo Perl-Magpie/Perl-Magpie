@@ -50,6 +50,13 @@ if ($action === 'show_tests') {
 		$results = filter_results($filter, $results);
 	}
 
+	$uuids = get_bad_test_uuids($results);
+	$cmd   = "get_test_body.pl " . join(" ", $uuids);
+
+	if (is_admin()) {
+		k($cmd);
+	}
+
 	$s->assign('results', $results);
 }
 
@@ -194,6 +201,23 @@ function filter_results($filter, $data) {
 			$ret[] = $x;
 		}
 	}
+
+	return $ret;
+}
+
+function get_bad_test_uuids($data) {
+	$review = [];
+	foreach ($data as $x) {
+		$grade = $x['grade'];
+		$uuid  = $x['guid'];
+		$bytes = $x['x_test_bytes'];
+
+		if ($grade !== 'PASS' && $bytes < 128) {
+			$review[] = $uuid;
+		}
+	}
+
+	$ret = array_unique($review);
 
 	return $ret;
 }
