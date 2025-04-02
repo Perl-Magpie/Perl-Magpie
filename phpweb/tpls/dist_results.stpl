@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Results for {$dist_fmt} {$dist_ver}</title>
+		<title>Results for {$dist} {$dist_ver}</title>
 		<link href="/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 		<link href="/css/dist.css" rel="stylesheet">
 
@@ -14,7 +14,7 @@
 
 		<h1 class="border-bottom mx-0 px-3 magpie_header pb-2 mb-3 row">
 			<div class="col-11 ps-0">
-				Test Results for <a class="text-decoration-none" href="dist.php?dist={$dist_fmt}&version={$dist_ver}"><b>{$dist_fmt} {$dist_ver}</b></a>
+				Test Results for <a class="text-decoration-none" href="dist.php?dist={$dist}&version={$dist_ver}"><b>{$dist} {$dist_ver}</b></a>
 			</div>
 			<div class="col-1 pe-0 text-end">
 				<a href="/" class="text-decoration-none"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
