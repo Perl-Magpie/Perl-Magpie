@@ -24,8 +24,8 @@
 				{foreach $last_hour as $x}
 				<tr>
 					<td class="w-75">
-						<a class="text-decoration-none" title="Show results" href="dist.php?dist={$x.distribution|dist_to_human}">
-							{$x.distribution|dist_to_human}
+						<a class="text-decoration-none" title="Show results" href="dist.php?dist={$x.distribution}">
+							{$x.distribution}
 						</a>
 					</td>
 					<td class="w-25">{$x.count}</td>
@@ -44,8 +44,8 @@
 				{foreach $last_day as $x}
 				<tr>
 					<td class="w-75">
-						<a class="text-decoration-none" title="Show results" href="dist.php?dist={$x.distribution|dist_to_human}">
-							{$x.distribution|dist_to_human}
+						<a class="text-decoration-none" title="Show results" href="dist.php?dist={$x.distribution}">
+							{$x.distribution}
 						</a>
 					</td>
 					<td class="w-25">{$x.count}</td>

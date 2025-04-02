@@ -25,7 +25,7 @@
 			<table class="table table-sm">
 				<thead class="table-success fw-bold">
 					<td style="width: 12em;">Date</td>
-					<td>Module</td>
+					<td>Distribution</td>
 					<td style="width: 8em;">Version</td>
 					<td style="width: 8em;">OS</td>
 					<td style="width: 12em;">Status</td>
@@ -34,7 +34,7 @@
 					{foreach $log as $x}
 					<tr>
 						<td title="{$x.unixtime|format_date}">{$x.unixtime|human_time_diff:' ago'}</td>
-						<td><a href="dist.php?dist={$x.distribution}">{$x.distribution|dist_to_human}</a></td>
+						<td><a href="dist.php?dist={$x.distribution}">{$x.distribution}</a></td>
 						<td><a href="dist.php?dist={$x.distribution}&amp;version={$x.dist_version}">{$x.dist_version}</a></a></td>
 						<td>{$x.osname_fmt}</a></td>
 						<td class="{if $x.grade === "PASS"}status_pass{elseif $x.grade === "FAIL"}status_fail{elseif $x.grade === "UNKNOWN"}status_unknown{else}status_na{/if}">{$x.grade}</td>
