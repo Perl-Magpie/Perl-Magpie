@@ -13,7 +13,10 @@ $dbq = db_init();
 ////////////////////////////////////////////////////////////////////////////////
 $mc  = new Memcached();
 $mc->addServer('127.0.0.1', 11211);
-$mc->setOption(Memcached::OPT_COMPRESSION, true);
+
+// Compression is off for now. This was slowing things down one some larger
+// data set()'s
+$mc->setOption(Memcached::OPT_COMPRESSION, false);
 ////////////////////////////////////////////////////////////////////////////////
 
 # Syslog
