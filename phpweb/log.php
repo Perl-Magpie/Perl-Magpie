@@ -33,7 +33,7 @@ print $s->fetch("tpls/log.stpl");
 function get_log($count, $offset) {
 	global $dbq;
 
-	$sql = "SELECT distribution, grade, EXTRACT(EPOCH FROM test_ts) as unixtime, dist_version, osname
+	$sql = "SELECT distribution, grade, EXTRACT(EPOCH FROM test_ts) as unixtime, dist_version, osname, guid
 		FROM test
 		ORDER BY test_ts DESC
 		LIMIT ?
