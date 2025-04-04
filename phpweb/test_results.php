@@ -23,14 +23,13 @@ if (!$info) {
 }
 
 // Highlight some strings in HTML to make reading easier
-$test_body = $info['text_report'];
-$test_body = highlight_body($test_body);
+$test_body               = $info['text_report'];
+$info['text_report_fmt'] = highlight_body($test_body);
 
 $ms = sw();
 $s->assign('page_ms' , $ms);
 $s->assign('uuid'    , $uuid);
 $s->assign('info'    , $info);
-$s->assign('test_str', $test_body);
 $s->assign('cached'  , $FROM_CACHE);
 
 ///////////////////////////////////

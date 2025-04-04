@@ -46,7 +46,7 @@
 			</table>
 
 			{if $cached}<div class="alert alert-success fw-bold p-2">Test body is cached</div>{/if}
-			<pre class="border bg-light p-2 font-scp">{$test_str}</pre>
+			<pre class="border bg-light p-2 font-scp">{$info.text_report_fmt}</pre>
 		</div>
 	</body>
 </html>
