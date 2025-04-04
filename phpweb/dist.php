@@ -50,13 +50,6 @@ if ($action === 'show_tests') {
 		$results = filter_results($filter, $results);
 	}
 
-	$uuids = get_bad_test_uuids($results);
-	$cmd   = "get_test_body.pl " . join(" ", $uuids);
-
-	if (is_admin()) {
-		k($cmd);
-	}
-
 	$s->assign('results', $results);
 }
 
