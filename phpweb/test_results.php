@@ -61,7 +61,7 @@ function write_test_to_db($uuid, $test_str) {
 
 	$len      = strlen($brotli_str);
 	$len_orig = strlen($test_str);
-	mplog("Wrote $len bytes ($len_orig) top DB for $uuid");
+	mplog("Wrote $len bytes ($len_orig) to DB for $uuid");
 
 	return 1;
 }
