@@ -9,13 +9,15 @@ $str   = $_GET['str']   ?? "";
 
 ////////////////////////////////////////////////////////
 
-$x = get_all_dists();
-$y = filter_results($x, $str);
+$x       = get_all_dists();
+$res     = filter_results($x, $str);
+$res_fmt = highlight_results($res, $str);
 
 $ms = sw();
-$s->assign('page_ms'   , $ms);
-$s->assign('search_str', $str);
-$s->assign('results'   , $y);
+$s->assign('page_ms'    , $ms);
+$s->assign('search_str' , $str);
+$s->assign('results'    , $res);
+$s->assign('results_fmt', $res_fmt);
 
 ///////////////////////////////////
 
@@ -40,19 +42,23 @@ function filter_results($all, $filter) {
 	$startw = [];
 	$other  = [];
 	foreach ($ret as $x) {
-		$fmt = preg_replace("/($filter)/i", "<b>$1</b>", $x);
-
 		// See if the string starts with the filter (case-insensitive)
 		if (preg_match("/^$filter/i", $x)) {
-			$startw[] = $fmt;
+			$startw[] = $x;
 		} else {
-			$other[] = $fmt;
+			$other[] = $x;
 		}
 	}
 
 	$ret = array_merge($startw, $other);
 	// Limit results to the first 50
 	$ret = array_slice($ret, 0, 50);
+
+	return $ret;
+}
+
+function highlight_results($input, $filter = "ran") {
+	$ret = preg_replace("/($filter)/i", "<span class=\"search_highlight\">$1</span>", $input);
 
 	return $ret;
 }

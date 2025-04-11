@@ -33,7 +33,7 @@
 			<div class="mt-3 border bg-light rounded py-2">
 				{if $results}
 				<ul class="mb-2">
-				{foreach $results as $x}
+				{foreach $results_fmt as $x}
 				<li><a class="text-decoration-none" href="dist.php?dist={$x|strip_tags}">{$x}</a></li>
 				{/foreach}
 				</ul>

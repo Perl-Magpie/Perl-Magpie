@@ -37,6 +37,13 @@
 	font-family: "Source Code Pro";
 }
 
+.search_highlight {
+	font-weight   : bold;
+	background    : #e2e2e2;
+	color         : darkblue;
+	border-radius : 3px;
+}
+
 /* Best monospace font EVAR! */
 /* http://blogs.adobe.com/typblography/2012/09/source-code-pro.html */
 @font-face {
