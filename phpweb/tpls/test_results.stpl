@@ -28,8 +28,9 @@
 				<thead>
 					<tr>
 						<th>Perl Version</th>
-						<th>OS</th>
 						<th>Test Time</th>
+						<th>OS</th>
+						<th>Architecture</th>
 						<th>Tester</th>
 						<th>Grade</th>
 					</tr>
@@ -37,8 +38,9 @@
 				<tbody class="table-group-divider">
 					<tr>
 						<td>{$info.perl_version}</td>
-						<td>{$info.osname|os_normalize}</td>
 						<td>{$info.test_unixtime|format_date}</td>
+						<td>{$info.osname|os_normalize}</td>
+						<td>{$info.archname}</td>
 						<td>{$info.tester_name}</td>
 						<td class="status_{$info.grade|strtolower}">{$info.grade}</td>
 					</tr>
