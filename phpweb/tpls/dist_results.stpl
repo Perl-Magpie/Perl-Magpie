@@ -28,8 +28,9 @@
 				<thead>
 					<tr>
 						<th>Perl Version</th>
-						<th>OS</th>
 						<th>Test Date</th>
+						<th>OS</th>
+						<th>Architecture</th>
 						<th>Tester</th>
 						<th>Grade</th>
 					</tr>
@@ -38,8 +39,9 @@
 					{foreach $results as $x}
 					<tr>
 						<td>{$x.perl_version}</td>
-						<td>{$x.osname|os_normalize}</td>
 						<td><a href="test_results.php?uuid={$x.guid}">{$x.unixtime|format_date}</a>{if $x.x_test_bytes > 0}<span class="ms-1" title="Test report cached locally">📋</span>{/if}</td>
+						<td>{$x.osname|os_normalize}</td>
+						<td>{$x.archname}</td>
 						<td>{$x.tester_name}</td>
 						<td class="status_{$x.grade|strtolower}">{$x.grade}</td>
 					</tr>
