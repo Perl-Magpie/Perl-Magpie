@@ -163,10 +163,11 @@ function get_test_results($dist, $version, $time) {
 
 	$time_str = date("Y-m-d H:i:s", $time);
 
-	$sql = "SELECT archname, distribution_name, grade, guid, osname, perl_version, tester, EXTRACT(EPOCH FROM test_ts) as unixtime, tester.name as tester_name, octet_length(text_report) as x_test_bytes
+	$sql = "SELECT arch_name, distribution_name, grade, guid, osname, perl_version, tester, EXTRACT(EPOCH FROM test_ts) as unixtime, tester.name as tester_name, octet_length(text_report) as x_test_bytes
 		FROM test
 		INNER JOIN tester ON (test.tester = tester.uuid)
 		INNER JOIN distribution_info USING (distribution_id)
+		INNER JOIN os_arch USING (arch_id)
 		WHERE test_ts > ? AND distribution_name = ? AND distribution_version = ?
 		ORDER BY perl_version desc";
 
@@ -185,7 +186,7 @@ function filter_results($filter, $data) {
 		$grade  = strtolower($x['grade']);
 		$pver   = $x['perl_version'];
 		$tester = $x['tester_name'];
-		$arch   = $x['archname'];
+		$arch   = $x['arch_name'];
 
 		// Build a string of all the pieces and run the filter against the string
 		// This is ghetto but it works

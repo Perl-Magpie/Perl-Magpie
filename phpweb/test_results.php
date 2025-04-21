@@ -154,6 +154,7 @@ function get_test_info($uuid) {
 		FROM test
 		LEFT  JOIN test_results USING (guid)
 		INNER JOIN tester ON (test.tester = tester.uuid)
+		INNER JOIN os_arch USING (arch_id)
 		INNER JOIN distribution_info USING (distribution_id)
 		WHERE guid = ?;";
 
