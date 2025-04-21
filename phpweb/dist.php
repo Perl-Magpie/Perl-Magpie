@@ -75,7 +75,7 @@ if ($action === 'show_tests') {
 function get_dist_versions($dist) {
 	global $dbq;
 
-	$sql = "SELECT distinct(dist_version) as dist_version FROM test WHERE distribution = ? ORDER BY dist_version DESC;";
+	$sql = "SELECT distinct(distribution_version) as distribution_version FROM distribution_info WHERE distribution_name = ? ORDER BY distribution_version DESC;";
 	$ret = $dbq->query($sql, [$dist], 'one_column');
 
 	usort($ret, 'version_compare');
@@ -163,10 +163,11 @@ function get_test_results($dist, $version, $time) {
 
 	$time_str = date("Y-m-d H:i:s", $time);
 
-	$sql = "SELECT archname, distribution, grade, guid, osname, perl_version, tester, EXTRACT(EPOCH FROM test_ts) as unixtime, tester.name as tester_name, octet_length(text_report) as x_test_bytes
+	$sql = "SELECT archname, distribution_name, grade, guid, osname, perl_version, tester, EXTRACT(EPOCH FROM test_ts) as unixtime, tester.name as tester_name, octet_length(text_report) as x_test_bytes
 		FROM test
 		INNER JOIN tester ON (test.tester = tester.uuid)
-		WHERE test_ts > ? AND distribution = ? AND dist_version = ?
+		INNER JOIN distribution_info USING (distribution_id)
+		WHERE test_ts > ? AND distribution_name = ? AND distribution_version = ?
 		ORDER BY perl_version desc";
 
 	$ret = $dbq->query($sql, [$time_str, $dist, $version]);

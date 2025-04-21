@@ -1,6 +1,7 @@
 <?php
 
 require("include/magpie.inc.php");
+$ZSTD_DICT = "/var/tmp/magpie-dict";
 
 sw();
 $debug = $_GET['debug'] ?? 0;
@@ -51,17 +52,36 @@ function write_test_to_db($uuid, $test_str) {
 
 	$brotli_str = brotli_compress($test_str, 9, BROTLI_TEXT);
 
-	$sql  = "UPDATE test SET text_report = :data WHERE guid = :uuid;";
-    $stmt = $dbq->dbh->prepare($sql);
+	$sql = "UPDATE test SET text_report = :data WHERE guid = :uuid;";
+    $sth = $dbq->dbh->prepare($sql);
 
-    $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
-    $stmt->bindParam(':data', $brotli_str, PDO::PARAM_LOB); // Use LOB for bytea
+    $sth->bindParam(':uuid', $uuid, PDO::PARAM_STR);
+    $sth->bindParam(':data', $brotli_str, PDO::PARAM_LOB); // Use LOB for bytea
 
-    $stmt->execute();
+    $sth->execute();
 
 	$len      = strlen($brotli_str);
 	$len_orig = strlen($test_str);
 	mplog("Wrote $len bytes ($len_orig) to DB for $uuid");
+
+	////////////////////////////////////////////////////////////////////
+
+	$use_zstd = 1;
+
+	if ($use_zstd) {
+		$dict     = file_get_contents($GLOBALS['ZSTD_DICT']);
+		$zstd_str = zstd_compress_dict($test_str, $dict);
+
+		//kd($dict);
+
+		$sql = "INSERT INTO test_results (guid, txt_zstd) VALUES (:uuid, :data);";
+		$sth = $dbq->dbh->prepare($sql);
+
+		$sth->bindParam(':uuid', $uuid, PDO::PARAM_STR);
+		$sth->bindParam(':data', $zstd_str, PDO::PARAM_LOB); // Use LOB for bytea
+
+		$sth->execute();
+	}
 
 	return 1;
 }
@@ -130,29 +150,34 @@ function get_test_body_perl($uuid) {
 function get_test_info($uuid) {
 	global $dbq;
 
-	$sql = "SELECT *, EXTRACT(EPOCH FROM test_ts) as test_unixtime, tester.name as tester_name
+	$sql = "SELECT *, EXTRACT(EPOCH FROM test_ts) as test_unixtime, tester.name as tester_name, txt_zstd
 		FROM test
+		LEFT  JOIN test_results USING (guid)
 		INNER JOIN tester ON (test.tester = tester.uuid)
+		INNER JOIN distribution_info USING (distribution_id)
 		WHERE guid = ?;";
 
 	$ret = $dbq->query($sql, [$uuid], 'one_row');
 
-	// The text_report field is brotli compressed in the DB
-	$raw = $ret['text_report'];
-	$bro = stream_get_contents($raw);
-	$str = @brotli_uncompress($bro);
+	$rawz = $ret['txt_zstd']    ?? null;
+	$rawb = $ret['text_report'] ?? null;
 
-	// Brotli uncompress failed
-	if ($str === false) {
-		$str = "";
+	if ($rawz) {
+		$zst  = @stream_get_contents($rawz);
+		$dict = file_get_contents($GLOBALS['ZSTD_DICT']);
+		$str  = zstd_uncompress_dict($zst, $dict);
+	} elseif ($rawb) {
+		$bro = stream_get_contents($rawb);
+		$str = @brotli_uncompress($bro);
+		$str = $str ?? "";
 	}
 
 	$ret['text_report'] = trim($str);
 
-	$db_len = strlen($bro);
-	if (($db_len > 0) && (strlen($str) == 0)) {
-		mplog("$db_len bytes in DB but is not valid brotli");
-	}
+	//$db_len = strlen($bro);
+	//if (($db_len > 0) && (strlen($str) == 0)) {
+	//    mplog("$db_len bytes in DB but is not valid brotli");
+	//}
 
 	// If we don't have the text report in the DB we fetch it via HTTP from CPT
 	if (!$ret['text_report']) {
