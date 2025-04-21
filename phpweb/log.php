@@ -33,9 +33,10 @@ print $s->fetch("tpls/log.stpl");
 function get_log($count, $offset) {
 	global $dbq;
 
-	$sql = "SELECT distribution, grade, EXTRACT(EPOCH FROM test_ts) as unixtime, dist_version,
+	$sql = "SELECT distribution_name, grade, EXTRACT(EPOCH FROM test_ts) as unixtime, distribution_version,
 					osname, guid, octet_length(text_report) as test_bytes
 		FROM test
+		INNER JOIN distribution_info USING (distribution_id)
 		ORDER BY test_ts DESC
 		LIMIT ?
 		OFFSET ?;";

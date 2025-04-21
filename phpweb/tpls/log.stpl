@@ -34,8 +34,8 @@
 					{foreach $log as $x}
 					<tr>
 						<td title="{$x.unixtime|format_date}"><a href="/test_results.php?uuid={$x.guid}">{$x.unixtime|human_time_diff:' ago'}</a></td>
-						<td><a href="dist.php?dist={$x.distribution}">{$x.distribution}</a></td>
-						<td><a href="dist.php?dist={$x.distribution}&amp;version={$x.dist_version}">{$x.dist_version}</a></a></td>
+						<td><a href="dist.php?dist={$x.distribution_name}">{$x.distribution_name}</a></td>
+						<td><a href="dist.php?dist={$x.distribution_name}&amp;version={$x.distribution_version}">{$x.distribution_version}</a></a></td>
 						<td>{$x.osname_fmt}</a></td>
 						<td class="{if $x.grade === "PASS"}status_pass{elseif $x.grade === "FAIL"}status_fail{elseif $x.grade === "UNKNOWN"}status_unknown{else}status_na{/if}">{$x.grade}</td>
 					</tr>
