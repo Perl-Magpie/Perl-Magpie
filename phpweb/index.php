@@ -54,10 +54,11 @@ function get_top_x(int $number, int $time) {
 
 	$time_str = date("Y-m-d H:i:s", $time);
 
-	$sql = "SELECT count(guid), distribution
+	$sql = "SELECT count(guid), distribution_name
 		FROM test
+		INNER JOIN distribution_info USING (distribution_id)
 		WHERE test_ts > ?
-		GROUP BY distribution
+		GROUP BY distribution_name
 		ORDER BY 1 desc
 		LIMIT ?;";
 
