@@ -98,11 +98,9 @@ function highlight_body($test_body) {
 	$test_body = preg_replace("/^(x?t.*\. ok)$/m","<span class=\"status_pass\">$1</span>", $test_body);
 
 	// Red/fail
-	$test_body = preg_replace("/^(Failed.*)/m","<span class=\"status_fail\">$1</span>", $test_body);
+	$test_body = preg_replace("/^((#\s+)?Failed.*)/mi","<span class=\"status_fail\">$1</span>", $test_body);
 	$test_body = preg_replace("/\b(Result: FAIL)\b/i","<span class=\"status_fail\">$1</span>", $test_body);
-	$test_body = preg_replace("/^(# Failed test.*)$/mi","<span class=\"status_fail\">$1</span>", $test_body);
 	$test_body = preg_replace("/(Parse errors.*)$/mi","<span class=\"status_fail\">$1</span>", $test_body);
-	$test_body = preg_replace("/^(#   Failed test.*?line \d+.)$/ms","<span class=\"status_fail\">$1</span>", $test_body);
 	// Matches 'ExeAsDll.xs:1125:41: error:'
 	$test_body = preg_replace("/^(.+\w+\.\w{1,3}.*error:)/mi","<span class=\"status_fail\">$1</span>", $test_body);
 	$test_body = preg_replace("/^(Compilation failed in require.*)$/mi","<span class=\"status_fail\">$1</span>", $test_body);
