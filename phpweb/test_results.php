@@ -157,6 +157,9 @@ function get_test_info($uuid) {
 		WHERE guid = ?;";
 
 	$ret = $dbq->query($sql, [$uuid], 'one_row');
+	if (!$ret) {
+		error_out("Unable to find distribution for <code>$uuid</code>", 45328);
+	}
 
 	$rawz = $ret['txt_zstd']    ?? null;
 	$rawb = $ret['text_report'] ?? null;
