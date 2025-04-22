@@ -161,6 +161,7 @@ function get_test_info($uuid) {
 	$rawz = $ret['txt_zstd']    ?? null;
 	$rawb = $ret['text_report'] ?? null;
 
+	$str = "";
 	if ($rawz) {
 		$zst  = @stream_get_contents($rawz);
 		$dict = file_get_contents($GLOBALS['ZSTD_DICT']);
