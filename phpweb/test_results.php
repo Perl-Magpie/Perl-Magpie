@@ -189,44 +189,39 @@ function get_test_info($uuid) {
 	return $ret;
 }
 
-// Fetch a test based on UUID from cpantesters.org via HTTPS
+// Fetch test information via API
 function fetch_test_body_from_cpt($uuid) {
 	$start = microtime(1);
-	$url   = "http://www.cpantesters.org/cpan/report/$uuid";
+	$url   = "http://api.cpantesters.org/v3/report/$uuid";
 
-	$ckey = "uuid:$uuid";
-	$data = $GLOBALS['mc']->get($ckey);
+	$ckey = "uuidj:$uuid";
+	$json = $GLOBALS['mc']->get($ckey);
 
-	$curl_errno = 0;
-	$http_code  = 0;
-
-	if ($data) {
-		$GLOBALS['FROM_CACHE'] = true;
-		$body                  = $data;
+	if ($json) {
+		$x   = json_decode($json, true);
+		$ret = $x['result']['output']['uncategorized'];
 	} else {
-		$body = http_get_with_timeout($url, 2, $curl_errno, $http_code);
-		$body = trim($body);
+		$curl_errno = 0;
+		$http_code  = 0;
 
-		if (strlen($body) > 256) {
-			$GLOBALS['mc']->set($ckey, $body);
+		$json = http_get_with_timeout($url, 2, $curl_errno, $http_code);
+		$ms   = intval((microtime(1) - $start) * 1000);
+
+		$x   = json_decode($json, true);
+		$ret = $x['result']['output']['uncategorized'] ?? "";
+
+		if ($curl_errno == 28) {
+			$ret = "Timeout fetching $uuid from CPT after $ms ms";
+			mplog($ret);
+		} elseif ($http_code != 200) {
+			//k($curl_errno, $x);
+			$ret = "Non-OK HTTP code ($http_code) fetching $uuid from CPT";
+			mplog($ret);
+		} else {
+			mplog("Fetched $uuid from CPT API in $ms ms");
+			$ok   = write_test_to_db($uuid, $ret);
+			$json = $GLOBALS['mc']->set($ckey, $json);
 		}
-	}
-
-	$ret = $body;
-	if (preg_match("/<pre>(.+?)<\/pre>/ms", $body, $m)) {
-		$ret = trim($m[1]);
-		$ret = strip_tags($ret);
-    }
-
-	$ms = intval((microtime(1) - $start) * 1000);
-
-	if ($curl_errno == 28) {
-		mplog("Timeout fetching $uuid from CPT after $ms ms");
-	} elseif ($http_code != 200) {
-		mplog("Non-OK HTTP code $http_code fetching $uuid from CPT");
-	} else {
-		mplog("Fetched $uuid from CPT in $ms ms");
-		$ok = write_test_to_db($uuid, $ret);
 	}
 
 	return $ret;
