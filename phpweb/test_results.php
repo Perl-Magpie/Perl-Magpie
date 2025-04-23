@@ -1,7 +1,6 @@
 <?php
 
 require("include/magpie.inc.php");
-$ZSTD_DICT = "/var/tmp/magpie-dict";
 
 sw();
 $debug = $_GET['debug'] ?? 0;
