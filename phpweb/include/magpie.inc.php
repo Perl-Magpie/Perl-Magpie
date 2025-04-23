@@ -1,5 +1,7 @@
 <?php
 
+// This is the zstandard dictionary used to compress new test results
+// Note: it must be in the `dict_info` table in the DB for decompression to work
 $ZSTD_DICT = "include/zstd-dict/magpie-dict-2025";
 
 ////////////////////////////////////////////////////////////////////////////////
