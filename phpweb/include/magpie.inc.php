@@ -1,6 +1,6 @@
 <?php
 
-$ZSTD_DICT = "include/zstd-dict/magpie-dict";
+$ZSTD_DICT = "include/zstd-dict/magpie-dict-2025";
 
 ////////////////////////////////////////////////////////////////////////////////
 require("include/krumo/class.krumo.php");
