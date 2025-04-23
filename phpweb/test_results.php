@@ -156,7 +156,7 @@ function get_test_info($uuid) {
 		INNER JOIN tester ON (test.tester = tester.uuid)
 		INNER JOIN os_arch USING (arch_id)
 		INNER JOIN distribution_info USING (distribution_id)
-		INNER JOIN dict_info USING (dict_id)
+		LEFT  JOIN dict_info USING (dict_id)
 		WHERE guid = ?;";
 
 	$ret = $dbq->query($sql, [$uuid], 'one_row');
