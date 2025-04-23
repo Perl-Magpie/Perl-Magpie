@@ -13,8 +13,6 @@ if (!$uuid) {
 	error_out("Invalid UUID", 13031);
 }
 
-$FROM_CACHE = false;
-
 ////////////////////////////////////////////////////////
 
 $info = get_test_info($uuid);
@@ -30,7 +28,6 @@ $ms = sw();
 $s->assign('page_ms' , $ms);
 $s->assign('uuid'    , $uuid);
 $s->assign('info'    , $info);
-$s->assign('cached'  , $FROM_CACHE);
 
 ///////////////////////////////////
 
@@ -125,6 +122,14 @@ function highlight_body($test_body) {
 function get_test_info($uuid) {
 	global $dbq;
 
+	$ckey = "testinfo:$uuid";
+	$data = $GLOBALS['mc']->get($ckey);
+
+	if ($data) {
+		$data['x_from_cache'] = true;
+		return $data;
+	}
+
 	$sql = "SELECT test.*, arch_name, EXTRACT(EPOCH FROM test_ts) as test_unixtime, tester.name as tester_name, txt_zstd, dict_file
 		FROM test
 		LEFT  JOIN test_results USING (guid)
@@ -154,17 +159,29 @@ function get_test_info($uuid) {
 	}
 
 	$ret['text_report'] = trim($str);
+	// Remove the stream from the object
+	unset($ret['txt_zstd']);
+
+	// This may get changed if we have to fetch the results from CPT
+	$ok = true;
 
 	// If we don't have the text report in the DB we fetch it via HTTP from CPT
 	if (!$ret['text_report']) {
-		$ret['text_report'] = fetch_test_body_from_cpt($uuid);
+		$ret['text_report'] = fetch_test_body_from_cpt($uuid, $ok);
+	}
+
+	$ret['x_from_cache'] = false;
+
+	// If we have valid data we should cache it
+	if ($ok) {
+		$data = $GLOBALS['mc']->set($ckey, $ret, 86400);
 	}
 
 	return $ret;
 }
 
 // Fetch test information via API
-function fetch_test_body_from_cpt($uuid) {
+function fetch_test_body_from_cpt($uuid, &$ok) {
 	$start = microtime(1);
 	$url   = "http://api.cpantesters.org/v3/report/$uuid";
 
@@ -185,16 +202,18 @@ function fetch_test_body_from_cpt($uuid) {
 		$ret = $x['result']['output']['uncategorized'] ?? "";
 
 		if ($curl_errno == 28) {
+			$ok  = false;
 			$ret = "Timeout fetching $uuid from CPT after $ms ms";
 			mplog($ret);
 		} elseif ($http_code != 200) {
-			//k($curl_errno, $x);
+			$ok  = false;
 			$ret = "Non-OK HTTP code ($http_code) fetching $uuid from CPT";
 			mplog($ret);
 		} else {
 			mplog("Fetched $uuid from CPT API in $ms ms");
-			$ok   = write_test_to_db($uuid, $ret);
-			$json = $GLOBALS['mc']->set($ckey, $json);
+			$write_ok = write_test_to_db($uuid, $ret);
+			$json     = $GLOBALS['mc']->set($ckey, $json);
+			$ok       = true;
 		}
 	}
 
