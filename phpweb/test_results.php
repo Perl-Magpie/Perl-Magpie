@@ -169,9 +169,13 @@ function get_test_info($uuid) {
 
 	if ($raw) {
 		$dict_file = "include/zstd-dict/" . $ret['dict_file'];
-		$zst       = @stream_get_contents($raw);
-		$dict      = file_get_contents($dict_file);
-		$str       = zstd_uncompress_dict($zst, $dict);
+		if (!is_readable($dict_file)) {
+			error_out("Unable to read zstd dictionary <code>$dict_file</code>", 95357);
+		}
+
+		$zst  = @stream_get_contents($raw);
+		$dict = file_get_contents($dict_file);
+		$str  = zstd_uncompress_dict($zst, $dict);
 	}
 
 	$ret['text_report'] = trim($str);
