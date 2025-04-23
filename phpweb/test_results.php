@@ -81,7 +81,7 @@ function write_test_to_db($uuid, $test_str) {
 
 	$sth->bindParam(':uuid'   , $uuid    , PDO::PARAM_STR);
 	$sth->bindParam(':data'   , $zstd_str, PDO::PARAM_LOB); // Use LOB for bytea
-	$sth->bindParam(':dict_id', $dic_id  , PDO::PARAM_STR);
+	$sth->bindParam(':dict_id', $dict_id , PDO::PARAM_STR);
 
 	$sth->execute();
 
