@@ -164,13 +164,14 @@ function get_test_info($uuid) {
 		error_out("Unable to find distribution for <code>$uuid</code>", 45328);
 	}
 
-	$rawz = $ret['txt_zstd'] ?? null;
-
+	$raw = $ret['txt_zstd'] ?? null;
 	$str = "";
-	if ($rawz) {
-		$zst  = @stream_get_contents($rawz);
-		$dict = file_get_contents($GLOBALS['ZSTD_DICT']);
-		$str  = zstd_uncompress_dict($zst, $dict);
+
+	if ($raw) {
+		$dict_file = "include/zstd-dict/" . $ret['dict_file'];
+		$zst       = @stream_get_contents($raw);
+		$dict      = file_get_contents($dict_file);
+		$str       = zstd_uncompress_dict($zst, $dict);
 	}
 
 	$ret['text_report'] = trim($str);
