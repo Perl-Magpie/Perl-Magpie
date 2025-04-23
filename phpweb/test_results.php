@@ -121,31 +121,6 @@ function highlight_body($test_body) {
 	return $test_body;
 }
 
-// Get test body from CPT via shell/Perl (slow)
-function get_test_body_perl($uuid) {
-	putenv("PERL5LIB=/home/bakers/perl5/lib/perl5/");
-	$cmd = "/usr/bin/perl /home/bakers/bin/get_test_body.pl $uuid";
-	$cmd = escapeshellcmd($cmd);
-
-	$x      = run_cmd($cmd);
-	$json   = $x['stdout'];
-	$exit   = $x['exit_code'];
-	$stderr = $x['stderr'];
-
-	global $FROM_CACHE;
-
-	if ($exit === 0) {
-		$x   = json_decode($json, true);
-		$ret = $x['body'] ?? 'ERROR 193871';
-
-		$FROM_CACHE = $x['cache'] === 1;
-	} else {
-		$ret = "Error running command. Exit: '$exit' Error: $stderr";
-	}
-
-	return $ret;
-}
-
 // Get information about a test from the DB
 function get_test_info($uuid) {
 	global $dbq;
