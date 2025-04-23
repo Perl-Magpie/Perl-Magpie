@@ -150,12 +150,13 @@ function get_test_body_perl($uuid) {
 function get_test_info($uuid) {
 	global $dbq;
 
-	$sql = "SELECT *, EXTRACT(EPOCH FROM test_ts) as test_unixtime, tester.name as tester_name, txt_zstd
+	$sql = "SELECT test.*, arch_name, EXTRACT(EPOCH FROM test_ts) as test_unixtime, tester.name as tester_name, txt_zstd, dict_file
 		FROM test
 		LEFT  JOIN test_results USING (guid)
 		INNER JOIN tester ON (test.tester = tester.uuid)
 		INNER JOIN os_arch USING (arch_id)
 		INNER JOIN distribution_info USING (distribution_id)
+		INNER JOIN dict_info USING (dict_id)
 		WHERE guid = ?;";
 
 	$ret = $dbq->query($sql, [$uuid], 'one_row');
