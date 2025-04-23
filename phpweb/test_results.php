@@ -65,22 +65,25 @@ function write_test_to_db($uuid, $test_str) {
 
 	////////////////////////////////////////////////////////////////////
 
-	$use_zstd = 1;
+	$dict_file = $GLOBALS['ZSTD_DICT'];
+	$sql       = "SELECT dict_id FROM dict_info WHERE dict_file = ?;";
+	$dict_id   = $dbq->query($sql, [basename($dict_file)], 'one_data');
 
-	if ($use_zstd) {
-		$dict     = file_get_contents($GLOBALS['ZSTD_DICT']);
-		$zstd_str = zstd_compress_dict($test_str, $dict);
-
-		//kd($dict);
-
-		$sql = "INSERT INTO test_results (guid, txt_zstd) VALUES (:uuid, :data);";
-		$sth = $dbq->dbh->prepare($sql);
-
-		$sth->bindParam(':uuid', $uuid, PDO::PARAM_STR);
-		$sth->bindParam(':data', $zstd_str, PDO::PARAM_LOB); // Use LOB for bytea
-
-		$sth->execute();
+	if (!$dict_id) {
+		error_out("Could not find info in dict_info for $dict_file", 65902);
 	}
+
+	$dict     = file_get_contents($dict_file);
+	$zstd_str = zstd_compress_dict($test_str, $dict);
+
+	$sql = "INSERT INTO test_results (guid, txt_zstd, dict_id) VALUES (:uuid, :data, :dict_id);";
+	$sth = $dbq->dbh->prepare($sql);
+
+	$sth->bindParam(':uuid'   , $uuid    , PDO::PARAM_STR);
+	$sth->bindParam(':data'   , $zstd_str, PDO::PARAM_LOB); // Use LOB for bytea
+	$sth->bindParam(':dict_id', $dic_id  , PDO::PARAM_STR);
+
+	$sth->execute();
 
 	return 1;
 }
@@ -160,26 +163,16 @@ function get_test_info($uuid) {
 		error_out("Unable to find distribution for <code>$uuid</code>", 45328);
 	}
 
-	$rawz = $ret['txt_zstd']    ?? null;
-	$rawb = $ret['text_report'] ?? null;
+	$rawz = $ret['txt_zstd'] ?? null;
 
 	$str = "";
 	if ($rawz) {
 		$zst  = @stream_get_contents($rawz);
 		$dict = file_get_contents($GLOBALS['ZSTD_DICT']);
 		$str  = zstd_uncompress_dict($zst, $dict);
-	} elseif ($rawb) {
-		$bro = stream_get_contents($rawb);
-		$str = @brotli_uncompress($bro);
-		$str = $str ?? "";
 	}
 
 	$ret['text_report'] = trim($str);
-
-	//$db_len = strlen($bro);
-	//if (($db_len > 0) && (strlen($str) == 0)) {
-	//    mplog("$db_len bytes in DB but is not valid brotli");
-	//}
 
 	// If we don't have the text report in the DB we fetch it via HTTP from CPT
 	if (!$ret['text_report']) {
