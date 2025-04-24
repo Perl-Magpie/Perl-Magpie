@@ -56,10 +56,6 @@ function write_test_to_db($uuid, $test_str) {
 
     $sth->execute();
 
-	$len      = strlen($brotli_str);
-	$len_orig = strlen($test_str);
-	mplog("Wrote $len bytes ($len_orig) to DB for $uuid");
-
 	////////////////////////////////////////////////////////////////////
 
 	$dict_file = $GLOBALS['ZSTD_DICT'];
@@ -70,8 +66,12 @@ function write_test_to_db($uuid, $test_str) {
 		error_out("Could not find info in dict_info for $dict_file", 65902);
 	}
 
+	$len_orig = strlen($test_str);
 	$dict     = file_get_contents($dict_file);
 	$zstd_str = zstd_compress_dict($test_str, $dict);
+	$len      = strlen($zstd_str);
+
+	mplog("Wrote $len bytes ($len_orig) to DB for $uuid");
 
 	$sql = "INSERT INTO test_results (guid, txt_zstd, dict_id) VALUES (:uuid, :data, :dict_id);";
 	$sth = $dbq->dbh->prepare($sql);
