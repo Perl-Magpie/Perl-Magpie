@@ -130,7 +130,9 @@ function get_test_info($uuid) {
 		return $data;
 	}
 
-	$sql = "SELECT test.*, arch_name, EXTRACT(EPOCH FROM test_ts) as test_unixtime, tester.name as tester_name, txt_zstd, dict_file
+	$sql = "SELECT test.*, distribution_name, distribution_version, arch_name,
+		EXTRACT(EPOCH FROM test_ts) as test_unixtime, tester.name as tester_name,
+		txt_zstd, dict_file
 		FROM test
 		LEFT  JOIN test_results USING (guid)
 		INNER JOIN tester ON (test.tester = tester.uuid)
