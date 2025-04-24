@@ -21,8 +21,7 @@ if (!$info) {
 }
 
 // Highlight some strings in HTML to make reading easier
-$test_body               = $info['text_report'];
-$info['text_report_fmt'] = highlight_body($test_body);
+$test_body = $info['text_report'];
 
 $ms = sw();
 $s->assign('page_ms' , $ms);
@@ -90,7 +89,7 @@ function write_test_to_db($uuid, $test_str) {
 // Note: We need to be careful with these and anchor the regexps with ^ and $ if possible
 // otherwise these can get pretty slow as we're parsing 8k of text for each one.
 // As of 2025-03-31 I can parse a test output in about 4ms with the 11 rules that are in place.
-function highlight_body($test_body) {
+function highlight_report($test_body) {
 	// Green/success
 	$test_body = preg_replace("/\b(Result: PASS)\b/","<span class=\"status_pass\">$1</span>", $test_body);
 	$test_body = preg_replace("/^(All tests successful\.)$/m","<span class=\"status_pass\">$1</span>", $test_body);
