@@ -72,7 +72,7 @@ function get_all_dists() {
 	// Items are in the DB with `-` separator
 	// Find all the entries in the DB that match
 	if (!$data) {
-		$sql = "SELECT distinct(distribution) FROM test;";
+		$sql = "SELECT distinct(distribution_name) FROM distribution_info;";
 		$ret = $dbq->query($sql, 'one_column');
 	} else {
 		$ret = $data;
