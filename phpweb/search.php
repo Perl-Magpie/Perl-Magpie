@@ -50,6 +50,9 @@ function filter_results($all, $filter) {
 		}
 	}
 
+	sort($startw);
+	sort($other);
+
 	$ret = array_merge($startw, $other);
 	// Limit results to the first 50
 	$ret = array_slice($ret, 0, 50);
