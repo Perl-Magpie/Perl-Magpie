@@ -20,9 +20,6 @@ if (!$info) {
 	error_out("Unable to find $uuid", 69035);
 }
 
-// Highlight some strings in HTML to make reading easier
-$test_body = $info['text_report'];
-
 $ms = sw();
 $s->assign('page_ms' , $ms);
 $s->assign('uuid'    , $uuid);
