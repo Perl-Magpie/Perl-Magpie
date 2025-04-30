@@ -38,21 +38,9 @@ print $s->fetch("tpls/test_results.stpl");
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 
-// Write the brotli compressed test to the DB
+// Write the zstd compressed test to the DB
 function write_test_to_db($uuid, $test_str) {
 	global $dbq;
-
-	$brotli_str = brotli_compress($test_str, 9, BROTLI_TEXT);
-
-	$sql = "UPDATE test SET text_report = :data WHERE guid = :uuid;";
-    $sth = $dbq->dbh->prepare($sql);
-
-    $sth->bindParam(':uuid', $uuid, PDO::PARAM_STR);
-    $sth->bindParam(':data', $brotli_str, PDO::PARAM_LOB); // Use LOB for bytea
-
-    $sth->execute();
-
-	////////////////////////////////////////////////////////////////////
 
 	$dict_file = $GLOBALS['ZSTD_DICT'];
 	$sql       = "SELECT dict_id FROM dict_info WHERE dict_file = ?;";
