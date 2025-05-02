@@ -85,19 +85,15 @@ function highlight_report(string $test_body) {
 	$test_body = preg_replace("/^((#\s+)?Failed.*)/mi","<span class=\"status_fail\">$1</span>", $test_body);
 	$test_body = preg_replace("/\b(Result: FAIL)\b/i","<span class=\"status_fail\">$1</span>", $test_body);
 	$test_body = preg_replace("/(Parse errors.*)$/mi","<span class=\"status_fail\">$1</span>", $test_body);
-	// Matches 'ExeAsDll.xs:1125:41: error:'
-	$test_body = preg_replace("/^(.+\w+\.\w{1,3}.*error:)/mi","<span class=\"status_fail\">$1</span>", $test_body);
 	$test_body = preg_replace("/^(Compilation failed in require.*)$/mi","<span class=\"status_fail\">$1</span>", $test_body);
 
 	// Gray/NA
 	$test_body = preg_replace("/(Perl v.*required.*this is only.*)/mi","<span class=\"status_na\">$1</span>", $test_body);
 	$test_body = preg_replace("/(! perl.*v\d.*)$/mi","<span class=\"status_na\">$1</span>", $test_body);
 	$test_body = preg_replace("/^(x?t.*\. skipped:.*)$/m","<span class=\"status_na\">$1</span>", $test_body);
-	$test_body = preg_replace("/^(.+\w+\.\w{1,3}.*note:)/mi","<span class=\"status_na\">$1</span>", $test_body);
 
 	// Orange/Unknown
 	$test_body = preg_replace("/^(\s*[gdc]?make:.*error.*)$/mi","<span class=\"status_unknown\">$1</span>", $test_body);
-	$test_body = preg_replace("/^(.+\w+\.\w{1,3}.*warning:)/mi","<span class=\"status_unknown\">$1</span>", $test_body);
 	$test_body = preg_replace("/^(Warning:.*)/mi","<span class=\"status_unknown\">$1</span>", $test_body);
 
 	return $test_body;
