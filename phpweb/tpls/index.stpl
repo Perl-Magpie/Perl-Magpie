@@ -24,7 +24,7 @@
 
 			<h3>Last hour</h3>
 			<table class="w-100 table table-striped table-hover border table-sm">
-				<thead class="table-success">
+				<thead class="magpie_header">
 				<tr>
 					<th>Package</th>
 					<th>Test Results</th>
@@ -44,7 +44,7 @@
 
 			<h3>Last day</h3>
 			<table class="w-100 table table-striped table-hover border table-sm">
-				<thead class="table-success">
+				<thead class="magpie_header">
 					<tr>
 						<th>Package</th>
 						<th>Test Results</th>
@@ -66,13 +66,13 @@
 				Statistics
 			</h3>
 			<table class="table table-sm">
-				<thead>
-					<tr class="table-success fw-bold">
-						<td>Hour</td>
-						<td>Day</td>
-						<td>Week</td>
-						<td>Month</td>
-						<td>Total</td>
+				<thead class="magpie_header">
+					<tr class="fw-bold">
+						<th>Hour</th>
+						<th>Day</th>
+						<th>Week</th>
+						<th>Month</th>
+						<th>Total</th>
 					</tr>
 				</thead>
 				<tbody>
