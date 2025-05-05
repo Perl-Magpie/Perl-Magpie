@@ -32,6 +32,17 @@
 
 		<div class="container-lg">
 			<h4><b>{$result_count}</b> results found</h4>
+
+			<div class="d-flex mb-3">
+				{foreach $grade_percent as $grade => $per}
+				<a href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter={$grade}" class="text-decoration-none" title="{$grade|ucfirst} {$per}%" style="width: {$per}%;">
+					<div class="status_{$grade} text-center fw-bold" style="overflow: hidden;">
+						{$per}%
+					</div>
+				</a>
+				{/foreach}
+			</div>
+
 			<table class="w-100 table border table-sm" style="table-layout: fixed">
 				<thead class="table-succes magpie_header">
 					<tr class="">

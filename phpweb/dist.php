@@ -30,6 +30,7 @@ if (!$version) {
 
 $results   = get_test_results($dist, $version, $time);
 $grade_cnt = get_grade_count($results);
+$grade_per = get_grade_percent($results);
 $os_cnt    = get_os_count($results);
 $group     = group_test_results($results);
 $dist_fmt  = str_replace("-", "::", $dist);
@@ -38,6 +39,7 @@ $s->assign('dist', $dist);
 $s->assign('dist_fmt', $dist_fmt);
 $s->assign('dist_ver', $version);
 $s->assign('grade_count', $grade_cnt);
+$s->assign('grade_percent', $grade_per);
 $s->assign('os_count', $os_cnt);
 $s->assign('version_list', $version_list);
 $s->assign('results', $group);
@@ -144,6 +146,32 @@ function get_grade_count($data) {
 	}
 
 	return $grades;
+}
+
+function get_grade_percent($data) {
+	$total = count($data);
+
+	foreach ($data as $x) {
+		$y = $x['grade'];
+
+		incr($grades[$y]);
+	}
+
+	$ret = [];
+	foreach ($grades as $grade => $count) {
+		$grade       = strtolower($grade);
+		$per         = sprintf("%0.1f", (($count / $total) * 100));
+		$ret[$grade] = $per;
+	}
+
+	$sort['pass']    = $ret['pass']    ?? null;
+	$sort['fail']    = $ret['fail']    ?? null;
+	$sort['na']      = $ret['na']      ?? null;
+	$sort['unknown'] = $ret['unknown'] ?? null;
+
+	$sort = array_filter($sort);
+
+	return $sort;
 }
 
 function version_sort($a, $b) {
