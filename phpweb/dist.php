@@ -151,6 +151,7 @@ function get_grade_count($data) {
 function get_grade_percent($data) {
 	$total = count($data);
 
+	$grades = [];
 	foreach ($data as $x) {
 		$y = $x['grade'];
 
