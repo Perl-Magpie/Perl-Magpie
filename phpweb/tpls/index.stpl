@@ -83,7 +83,7 @@
 						<td>{$count_month|number_format}</td>
 						<td>{$count_total|number_format}</td>
 					</tr>
-				<tbody>
+				</tbody>
 			</table>
 
 			<div class="footer mb-2 text-end">
