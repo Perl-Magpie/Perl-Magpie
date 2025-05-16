@@ -98,5 +98,6 @@
 			</div>
 		</div>
 
+		{if $query_summary}<div class="p-3">{$query_summary}</div>{/if}
 	</body>
 </html>
