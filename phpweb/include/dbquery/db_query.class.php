@@ -7,7 +7,7 @@ define("DB_QUERY_VERSION","1.1.1");
 class DBQuery {
 	var $debug                   = 0;
 	var $show_errors             = 1;   // If this is set to zero be silent about all errors
-	var $slow_query_time         = 0.1; // Highlight queries that takes longer than this
+	var $slow_query_time         = 100; // Highlight queries that take longer than this (in ms)
 	var $external_error_function = "";  // Override the built in error function
 	var $db_name                 = "";  // Placeholder
 	var $dbh_cache               = [];
@@ -358,7 +358,7 @@ class DBQuery {
 			$this->error_out($error, 13843);
 		}
 
-		$total = microtime(1) - $start;
+		$total = (microtime(1) - $start) * 1000;
 
 		// Store some info about this query
 		if (!isset($return_recs)) {
@@ -500,19 +500,19 @@ class DBQuery {
 			if ($item['exec_time'] > $this->slow_query_time) {
 				$row_color   = "#FF9FA1";
 				$sql_bg      = "#FFE4E6";
-				$query_title = "Warning: This query is above the Slow Query threshold of " . $this->slow_query_time . " seconds";
+				$query_title = "Warning: This query is above the Slow Query threshold of " . $this->slow_query_time . " ms";
 			} else {
 				$row_color   = "#E7FFEB";
 				$sql_bg      = "white";
 				$query_title = "";
 			}
 
-			$query_time = sprintf("%0.3f",$item['exec_time']);
+			$query_time = sprintf("%0.1f",$item['exec_time']);
 
 			$ret .= "<table title=\"$query_title\" style=\"width: 100%; border-collapse: collapse; border: 1px solid; margin-bottom: 1em;\">\n";
 			$ret .= "\t<tr style=\"background-color: $row_color; color: black; text-align: center;\">\n";
 			$ret .= "\t\t<td style=\"width: 8%; border: 1px solid;\"><b>#$count</b>$dbn</td>\n";
-			$ret .= "\t\t<td style=\"width: 15%; border: 1px solid;\">Time: <b>$query_time seconds</b></td>\n";
+			$ret .= "\t\t<td style=\"width: 15%; border: 1px solid;\">Time: <b>$query_time ms</b></td>\n";
 			$ret .= "\t\t<td style=\"width: 37%; border: 1px solid;\"><b>{$item['called_from_file']}</b> line <b>#{$item['called_from_line']}</b>$my_count</td>\n";
 			$ret .= "\t\t<td style=\"width: 20%; border: 1px solid;\">Return: <b>{$item['return_type']}</b></td>\n";
 			$ret .= "\t\t<td style=\"width: 20%; border: 1px solid;\">Returned: <b>{$item['records_returned']}</b></td>\n";
@@ -548,10 +548,10 @@ class DBQuery {
 			$total_time += $item['exec_time'];
 		}
 
-		$total_time = sprintf("%0.3f",$total_time);
+		$total_time = sprintf("%0.1f",$total_time);
 
 		$ret .= "<div><b>Total Queries:</b> $count</div>\n";
-		$ret .= "<div><b>Total SQL Execution:</b> $total_time seconds</div>\n";
+		$ret .= "<div><b>Total SQL Execution:</b> $total_time ms</div>\n";
 
 		return $ret;
 	}
