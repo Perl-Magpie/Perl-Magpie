@@ -17,7 +17,7 @@
 				<form method="get" action="/search.php">
 					<div class="input-group">
 						<input type="text" class="form-control form-control-lg" name="str" placeholder="Search for distribution" value="{$search_str}" />
-						<button class="btn btn-primary btn-lg" type="submit" id="button-addon1">Search</button>
+						<button class="btn btn-success btn-lg" type="submit" id="button-addon1">Search</button>
 					</div>
 				</form>
 			</div>
