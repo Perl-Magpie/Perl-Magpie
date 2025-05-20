@@ -219,4 +219,50 @@ function error_out($msg, $errno) {
 	exit(9);
 }
 
+function time_this($name = "end") {
+	static $data;
+	$time = microtime(1);
+
+	$data[] = [
+		'name' => $name,
+		'time' => $time,
+	];
+
+	$ret = [];
+	if ($name === "end") {
+		$items  = array_column($data, 'name');
+		$maxlen = max(array_map('strlen', $items));
+
+		if ($maxlen < 5) {
+			$maxlen = 5;
+		}
+
+		$start  = $data[0]['time'];
+		$total  = $time - $start;
+
+		mplog(str_repeat("-", 40));
+		foreach ($data as $x) {
+			$name = $x['name'];
+			$time = $x['time'];
+
+			if (!empty($prev_time)) {
+				$str = sprintf("TIME_THIS: %-{$maxlen}s = %4d ms", $name, ($time - $prev_time) * 1000);
+				mplog($str);
+
+				$ret[$name] = sprintf("%0.3f", $time - $prev_time);
+			}
+
+			$prev_time = $time;
+			$prev_name = $name;
+		}
+
+		mplog(str_repeat("-", 40));
+		$total_str = sprintf("TIME_THIS: %-{$maxlen}s = %4d ms", 'total', $total * 1000);
+		mplog($total_str);
+		mplog(str_repeat("-", 40));
+
+		return $ret;
+	}
+}
+
 // vim: tabstop=4 shiftwidth=4 noexpandtab autoindent softtabstop=4
