@@ -30,7 +30,7 @@
 					<th>Test Results</th>
 				</tr>
 				</thead>
-				{foreach $last_hour as $x}
+				{foreach $stats.last_hour as $x}
 				<tr>
 					<td class="w-75">
 						<a class="text-decoration-none" title="Show results" href="dist.php?dist={$x.distribution_name}">
@@ -50,7 +50,7 @@
 						<th>Test Results</th>
 					</tr>
 				</thead>
-				{foreach $last_day as $x}
+				{foreach $stats.last_day as $x}
 				<tr>
 					<td class="w-75">
 						<a class="text-decoration-none" title="Show results" href="dist.php?dist={$x.distribution_name}">
@@ -77,11 +77,11 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{$count_hour|number_format}</td>
-						<td>{$count_day|number_format}</td>
-						<td>{$count_week|number_format}</td>
-						<td>{$count_month|number_format}</td>
-						<td>{$count_total|number_format}</td>
+						<td>{$stats.count_hour|number_format}</td>
+						<td>{$stats.count_day|number_format}</td>
+						<td>{$stats.count_week|number_format}</td>
+						<td>{$stats.count_month|number_format}</td>
+						<td>{$stats.count_total|number_format}</td>
 					</tr>
 				</tbody>
 			</table>
