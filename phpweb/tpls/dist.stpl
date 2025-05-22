@@ -35,7 +35,7 @@
 
 			<div class="d-flex mb-3">
 				{foreach $grade_percent as $grade => $per}
-				<a href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter={$grade}" class="text-decoration-none" title="{$grade|ucfirst} {$per}%" style="width: {$per}%;">
+				<a href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter=\b{$grade}\b" class="text-decoration-none" title="{$grade|ucfirst} {$per}%" style="width: {$per}%;">
 					<div class="status_{$grade} text-center fw-bold" style="overflow: hidden;">
 						{$per}%
 					</div>
