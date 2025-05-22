@@ -139,10 +139,10 @@
 
 			<p class="mb-0"><b>Key:</b></p>
 			<div class="d-flex text-center fw-bold mb-3">
-				<div class="status_pass w-100">Pass: {$grade_count.PASS}</div>
-				<div class="status_fail w-100 ms-1">Fail: {$grade_count.FAIL}</div>
-				<div class="status_na w-100 ms-1">N/A: {$grade_count.NA}</div>
-				<div class="status_unknown w-100 ms-1">Unknown: {$grade_count.UNKNOWN}</div>
+				<a class="w-100 text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter=\bPASS\b"><div class="status_pass">Pass: {$grade_count.PASS}</div></a>
+				<a class="w-100 text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter=\bFAIL\b"><div class="status_fail ms-1">Fail: {$grade_count.FAIL}</div></a>
+				<a class="w-100 text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter=\bNA\b"><div class="status_na ms-1">N/A: {$grade_count.NA}</div></a>
+				<a class="w-100 text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter=\bUNKNOWN\b"><div class="status_unknown ms-1">Unknown: {$grade_count.UNKNOWN}</div></a>
 			</div>
 
 			<div class="row">
