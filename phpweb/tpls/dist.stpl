@@ -50,13 +50,19 @@
 						{if $os_count.linux}
 						<th class="os_col text-center os_linux"><a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter=Linux">Linux</a></th>
 						{/if}
+
 						{if $os_count.bsd}
 						<th class="os_col text-center os_bsd"><a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter=BSD">BSD</a></th>
+						{/if}
+
+						{if $os_count.solaris}
+						<th class="os_col text-center os_solaris"><a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter=solaris">Solaris</a></th>
 						{/if}
 
 						{if $os_count.darwin}
 						<th class="os_col text-center os_darwin"><a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter=Darwin">Darwin</a></th>
 						{/if}
+
 						{if $os_count.windows}
 						<th class="os_col text-center os_windows"><a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter=Windows">Windows</a></th>
 						{/if}
@@ -86,6 +92,18 @@
 								{if $x.bsd.FAIL}<div class="status_fail" style="width: {$x.bsd.FAIL}%">&nbsp;</div>{/if}
 								{if $x.bsd.UNKNOWN}<div class="status_unknown" style="width: {$x.bsd.UNKNOWN}%">&nbsp;</div>{/if}
 								{if $x.bsd.NA}<div class="status_na" style="width: {$x.bsd.NA}%">&nbsp;</div>{/if}
+							</div>
+							</a>
+						</td>
+						{/if}
+						{if $os_count.solaris}
+						<td class="text-center os_solaris">
+							<a class="text-decoration-none" href="?dist={$dist}&amp;version={$dist_ver}&amp;action=show_tests&amp;filter={$pv};solaris">
+							<div class="d-flex">
+								{if $x.solaris.PASS}<div class="status_pass" style="width: {$x.solaris.PASS}%">&nbsp;</div>{/if}
+								{if $x.solaris.FAIL}<div class="status_fail" style="width: {$x.solaris.FAIL}%">&nbsp;</div>{/if}
+								{if $x.solaris.UNKNOWN}<div class="status_unknown" style="width: {$x.solaris.UNKNOWN}%">&nbsp;</div>{/if}
+								{if $x.solaris.NA}<div class="status_na" style="width: {$x.solaris.NA}%">&nbsp;</div>{/if}
 							</div>
 							</a>
 						</td>
