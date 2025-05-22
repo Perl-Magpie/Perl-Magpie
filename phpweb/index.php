@@ -30,26 +30,40 @@ print $s->fetch("tpls/index.stpl");
 function get_stats() {
 	global $mc;
 
-	$ckey = 'index_stats';
-	$data = $mc->get($ckey);
+	// TopX tables are lighter and don't need to be cached as long
+	$ckey = 'index_stats_topx';
+	$topx = $mc->get($ckey);
+	$ret  = [];
 
-	if ($data) {
-		$data['from_cache'] = true;
-		return $data;
+	if ($topx) {
+		$ret = array_merge($ret, $topx);
+	} else {
+		$ret["last_hour"] = get_top_x(10, time() - 3600);
+		$ret["last_day"]  = get_top_x(10, time() - 86400);
+
+		$ok = $mc->set($ckey, $ret, 60);
 	}
 
-	$ret["last_hour"] = get_top_x(10, time() - 3600);
-	$ret["last_day"]  = get_top_x(10, time() - 86400);
+	////////////////////////////////////////////////////////////////////////////////
 
-	$ret['count_hour']  = get_count(time() - 3600         , time());
-	$ret['count_day']   = get_count(time() - 86400        , time());
-	$ret['count_week']  = get_count(time() - 86400 * 7    , time());
-	$ret['count_month'] = get_count(time() - 86400 * 30.41, time());
-	$ret['count_total'] = get_count(0, time());
+	// The daily stats don't change that much and take longer to generate.
+	// These take about 250ms to generate on 2025-05-22 with 1.5 million entries
+	// in the DB
+	$ckey = 'index_stats_counts';
+	$cnts = $mc->get($ckey);
 
-	$ok = $mc->set($ckey, $ret, 180);
+	if ($cnts) {
+		$ret = array_merge($ret, $cnts);
+	} else {
+		$ret['count_hour']  = get_count(time() - 3600         , time());
+		$ret['count_day']   = get_count(time() - 86400        , time());
+		$ret['count_week']  = get_count(time() - 86400 * 7    , time());
+		$ret['count_month'] = get_count(time() - 86400 * 30.41, time());
+		$ret['count_total'] = get_count(0, time());
 
-	$ret['from_cache'] = true;
+		// Cache for six hours
+		$ok = $mc->set($ckey, $ret, 3600 * 6);
+	}
 
 	return $ret;
 }
