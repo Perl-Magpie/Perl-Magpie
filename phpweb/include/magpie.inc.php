@@ -1,18 +1,20 @@
 <?php
 
+$base_dir = realpath(dirname(__FILE__) . "/../");
+
 // This is the zstandard dictionary used to compress new test results
 // Note: it must be in the `dict_info` table in the DB for decompression to work
-$ZSTD_DICT = "include/zstd-dict/magpie-dict-2025";
+$ZSTD_DICT = "$base_dir/include/zstd-dict/magpie-dict-2025";
 
 ////////////////////////////////////////////////////////////////////////////////
-require("include/krumo/class.krumo.php");
+require("$base_dir/include/krumo/class.krumo.php");
 ////////////////////////////////////////////////////////////////////////////////
-require("include/dbquery/db_query.class.php");
+require("$base_dir/include/dbquery/db_query.class.php");
 ////////////////////////////////////////////////////////////////////////////////
-require("include/sluz/sluz.class.php");
+require("$base_dir/include/sluz/sluz.class.php");
 $s   = new sluz();
 ////////////////////////////////////////////////////////////////////////////////
-require("include/global.inc.php");
+require("$base_dir/include/global.inc.php");
 $dbq = db_init();
 ////////////////////////////////////////////////////////////////////////////////
 $mc  = new Memcached();
