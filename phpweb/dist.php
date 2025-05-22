@@ -28,12 +28,13 @@ if (!$version) {
 	$version = $version_list[0] ?? "";
 }
 
-$results   = get_test_results($dist, $version, $time);
-$grade_cnt = get_grade_count($results);
-$grade_per = get_grade_percent($results);
-$os_cnt    = get_os_count($results);
-$group     = group_test_results($results);
-$dist_fmt  = str_replace("-", "::", $dist);
+$results    = get_test_results($dist, $version, $time);
+$test_stats = get_testing_stats($results);
+$grade_cnt  = get_grade_count($results);
+$grade_per  = get_grade_percent($results);
+$os_cnt     = get_os_count($results);
+$group      = group_test_results($results);
+$dist_fmt   = str_replace("-", "::", $dist);
 
 $s->assign('dist', $dist);
 $s->assign('dist_fmt', $dist_fmt);
@@ -45,6 +46,7 @@ $s->assign('version_list', $version_list);
 $s->assign('results', $group);
 $s->assign('result_count', count($results));
 $s->assign('json_link', $json_link);
+$s->assign('stats', $test_stats);
 
 // Use the raw results (not grouped)
 if ($action === 'show_tests') {
@@ -243,6 +245,42 @@ function get_bad_test_uuids($data) {
 	}
 
 	$ret = array_unique($review);
+
+	return $ret;
+}
+
+function get_testing_stats($results) {
+	$first_ut = 0;
+	$last_ut  = 0;
+	$data     = [];
+
+	foreach ($results as $x) {
+		$uuid = $x['guid'];
+		$ut   = $x['unixtime'];
+		$pver = $x['perl_version'];
+		$os   = $x['osname'];
+
+		if (!$first_ut || $first_ut > $ut) {
+			$first_ut = $ut;
+		}
+
+		if (!$last_ut || $last_ut < $ut) {
+			$last_ut = $ut;
+		}
+
+		// Build an array of all the combinations we've tested
+		$str        = "$pver/$os";
+		$data[$str] = 1;
+	}
+
+	$ret['first_test_time'] = human_time_diff($first_ut) . " ago";
+	$ret['last_test_time']  = human_time_diff($last_ut) . " ago";
+	$ret['configs_tested']  = count($data);
+
+	if ($ret['configs_tested'] == 0) {
+		$ret['first_test_time'] = "N/A";
+		$ret['last_test_time']  = "N/A";
+	}
 
 	return $ret;
 }
