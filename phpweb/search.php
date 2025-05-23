@@ -12,6 +12,9 @@ if (!$str) {
 	$str   = $parts[1] ?? "";
 }
 
+// Allow searching for Foo::Bar and Foo-Bar
+$str = preg_replace("/::/", "-", $str);
+
 ////////////////////////////////////////////////////////
 
 $x       = get_all_dists();
