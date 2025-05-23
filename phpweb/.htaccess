@@ -3,5 +3,6 @@ RewriteEngine On
 RewriteBase /
 
 RewriteRule ^dist/ dist.php
+RewriteRule ^log/ log.php
 
 ErrorDocument 404 /404.php
