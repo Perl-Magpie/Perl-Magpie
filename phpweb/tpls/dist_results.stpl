@@ -14,7 +14,7 @@
 
 		<h1 class="border-bottom mx-0 px-3 magpie_header pb-2 mb-3 row">
 			<div class="col-11 ps-0">
-				Test Results for <a class="text-decoration-none" href="/dist/{$dist}&version={$dist_ver}"><b>{$dist} {$dist_ver}</b></a>
+				Test Results for <a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/"><b>{$dist} {$dist_ver}</b></a>
 			</div>
 			<div class="col-1 pe-0 text-end">
 				<a href="/" class="text-decoration-none"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
@@ -40,7 +40,7 @@
 					<tr>
 						<td>{$x.perl_version}</td>
 						<td>
-							<a href="test_results.php?uuid={$x.guid}">{$x.unixtime|format_date}</a>
+							<a href="/results/{$x.guid}">{$x.unixtime|format_date}</a>
 						</td>
 						<td>{$x.osname|os_normalize}</td>
 						{*<td>{$x.arch_name}</td>*}

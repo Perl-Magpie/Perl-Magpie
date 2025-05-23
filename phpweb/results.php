@@ -8,6 +8,11 @@ $json  = $_GET['json']  ?? 0;
 $uuid  = $_GET['uuid']  ?? 0;
 
 if (!$uuid) {
+	$parts = get_uri_parts();
+	$uuid  = $parts[1] ?? "";
+}
+
+if (!$uuid) {
 	error_out("Missing test UUID", 12931);
 } elseif (!is_uuid($uuid)) {
 	error_out("Invalid UUID", 13031);
@@ -33,7 +38,7 @@ if ($json) {
 	$s->assign('debug_output', k($s->tpl_vars, KRUMO_RETURN));
 }
 
-print $s->fetch("tpls/test_results.stpl");
+print $s->fetch("tpls/results.stpl");
 
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
