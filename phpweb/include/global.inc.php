@@ -265,4 +265,16 @@ function time_this($name = "end") {
 	}
 }
 
+// Split the URI parts into an array
+// /dist/Foo-Bar/v0.2.0 => ['dist', 'Foo-Bar', 'v0.2.0']
+function get_uri_parts($uri = "") {
+	if (!$uri) {
+		$uri = $_SERVER['REQUEST_URI'] ?? "";
+	}
+
+	$parts = preg_split('/\//', $uri, 0, PREG_SPLIT_NO_EMPTY);
+
+	return $parts;
+}
+
 // vim: tabstop=4 shiftwidth=4 noexpandtab autoindent softtabstop=4
