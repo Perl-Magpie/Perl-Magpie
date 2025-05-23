@@ -11,8 +11,21 @@ $json    = $_GET['json']    ?? 0;
 $action  = $_GET['action']  ?? "";
 $filter  = $_GET['filter']  ?? "";
 
-$uri       = $_SERVER['REQUEST_URI'] ?? "";
-$json_link = "$uri&json=1";
+// Build the URI link for the JSON API
+$uri = $_SERVER['REQUEST_URI'] ?? "";
+if (str_contains($uri, '?')) {
+	$json_link = "$uri&json=1";
+} else {
+	$json_link = "$uri?json=1";
+}
+
+// This is the mod_rewrite URI format
+if (!$dist) {
+	$parts = get_uri_parts();
+
+	$dist    = $parts[1] ?? "";
+	$version = $parts[2] ?? "";
+}
 
 // Allow Module::Sub in the URL also
 $dist  = str_replace("::", "-", $dist);

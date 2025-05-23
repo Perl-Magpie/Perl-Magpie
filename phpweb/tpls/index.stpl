@@ -33,7 +33,7 @@
 				{foreach $stats.last_hour as $x}
 				<tr>
 					<td class="w-75">
-						<a class="text-decoration-none" title="Show results" href="dist.php?dist={$x.distribution_name}">
+						<a class="text-decoration-none" title="Show results" href="/dist/{$x.distribution_name}/">
 							{$x.distribution_name}
 						</a>
 					</td>
@@ -53,7 +53,7 @@
 				{foreach $stats.last_day as $x}
 				<tr>
 					<td class="w-75">
-						<a class="text-decoration-none" title="Show results" href="dist.php?dist={$x.distribution_name}">
+						<a class="text-decoration-none" title="Show results" href="/dist/{$x.distribution_name}/">
 							{$x.distribution_name}
 						</a>
 					</td>
