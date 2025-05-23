@@ -7,6 +7,11 @@ $debug = $_GET['debug'] ?? 0;
 $json  = $_GET['json']  ?? 0;
 $str   = $_GET['str']   ?? "";
 
+if (!$str) {
+	$parts = get_uri_parts();
+	$str   = $parts[1] ?? "";
+}
+
 ////////////////////////////////////////////////////////
 
 $x       = get_all_dists();

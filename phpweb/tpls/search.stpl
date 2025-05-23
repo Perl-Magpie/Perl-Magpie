@@ -22,7 +22,7 @@
 		</h1>
 
 		<div class="container-lg">
-			<form method="get" action="/search.php">
+			<form method="get" action="/search/">
 				<div class="input-group">
 					<input type="text" class="form-control" name="str" placeholder="Search..." value="{$search_str}" autofocus />
 					<button class="btn btn-success" type="submit" id="button-addon1">Search</button>
