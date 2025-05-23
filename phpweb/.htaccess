@@ -1,0 +1,5 @@
+RewriteEngine On
+#This is relative to the server root for apache (DUH!)
+RewriteBase /
+
+ErrorDocument 404 /404.php

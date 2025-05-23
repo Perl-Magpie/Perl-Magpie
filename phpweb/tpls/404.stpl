@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>404 Page Not Found</title>
+		<link href="/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+		<link href="/css/dist.css" rel="stylesheet">
+
+	</head>
+	<body class="">
+		{$debug_output}
+
+		<h1 class="border-bottom mx-0 px-3 magpie_header pb-2 mb-3">Perl-Magpie.org</h1>
+
+		<h1 class="alert alert-info m-3"><b>404</b> Magpie page not found</h1>
+	</body>
+</html>
