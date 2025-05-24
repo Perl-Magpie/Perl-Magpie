@@ -6,7 +6,6 @@ sw();
 $debug   = $_GET['debug']   ?? 0;
 $dist    = $_GET['dist']    ?? "";
 $version = $_GET['version'] ?? "";
-$time    = $_GET['time']    ?? 0;
 $json    = $_GET['json']    ?? 0;
 $action  = $_GET['action']  ?? "";
 $filter  = $_GET['filter']  ?? null;
@@ -48,7 +47,7 @@ if (!$version) {
 	$version = $version_list[0] ?? "";
 }
 
-$results    = get_test_results($dist, $version, $time);
+$results    = get_test_results($dist, $version);
 $test_stats = get_testing_stats($results);
 $grade_cnt  = get_grade_count($results);
 $grade_per  = get_grade_percent($results);
@@ -210,10 +209,8 @@ function version_sort($a, $b) {
 	}
 }
 
-function get_test_results($dist, $version, $time) {
+function get_test_results($dist, $version) {
 	global $dbq;
-
-	$time_str = date("Y-m-d H:i:s", $time);
 
 	$sql = "SELECT arch_name, distribution_name, grade, guid, osname, perl_version, tester, EXTRACT(EPOCH FROM test_ts) as unixtime, tester.name as tester_name, octet_length(txt_zstd) as x_test_bytes
 		FROM test
@@ -221,10 +218,10 @@ function get_test_results($dist, $version, $time) {
 		LEFT  JOIN test_results USING (guid)
 		INNER JOIN distribution_info USING (distribution_id)
 		INNER JOIN os_arch USING (arch_id)
-		WHERE test_ts > ? AND distribution_name = ? AND distribution_version = ?
+		WHERE distribution_name = ? AND distribution_version = ?
 		ORDER BY perl_version desc";
 
-	$ret = $dbq->query($sql, [$time_str, $dist, $version]);
+	$ret = $dbq->query($sql, [$dist, $version]);
 
 	usort($ret, 'version_sort');
 
