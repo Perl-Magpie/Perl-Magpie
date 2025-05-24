@@ -25,6 +25,13 @@ if (!$dist) {
 
 	$dist    = $parts[1] ?? "";
 	$version = $parts[2] ?? "";
+	$filter  = $parts[3] ?? "";
+
+	// If the URI is: /dist/Foo-Bar/v0.1.2/Linux
+	if ($filter) {
+		$action = 'show_tests';
+		$filter = "\b$filter\b"; // word boundaries
+	}
 }
 
 // Allow Module::Sub in the URL also
