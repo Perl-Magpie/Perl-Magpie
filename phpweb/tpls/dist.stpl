@@ -35,7 +35,7 @@
 
 			<div class="d-flex mb-3">
 				{foreach $grade_percent as $grade => $per}
-				<a href="/dist/{$dist}/{$dist_ver}/?action=show_tests&amp;filter=\b{$grade}\b" class="text-decoration-none" title="{$grade|ucfirst} {$per}%" style="width: {$per}%;">
+				<a href="/dist/{$dist}/{$dist_ver}/{$grade}/" class="text-decoration-none" title="{$grade|ucfirst} {$per}%" style="width: {$per}%;">
 					<div class="status_{$grade} text-center fw-bold" style="overflow: hidden;">
 						{$per}%
 					</div>
@@ -48,33 +48,33 @@
 					<tr class="">
 						<th class="pver_col"><a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/?action=show_tests">Perl Version</a></th>
 						{if $os_count.linux}
-						<th class="os_col text-center os_linux"><a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/?action=show_tests&amp;filter=Linux">Linux</a></th>
+						<th class="os_col text-center os_linux"><a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/Linux/">Linux</a></th>
 						{/if}
 
 						{if $os_count.bsd}
-						<th class="os_col text-center os_bsd"><a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/?action=show_tests&amp;filter=BSD">BSD</a></th>
+						<th class="os_col text-center os_bsd"><a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/BSD/">BSD</a></th>
 						{/if}
 
 						{if $os_count.solaris}
-						<th class="os_col text-center os_solaris"><a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/?action=show_tests&amp;filter=solaris">Solaris</a></th>
+						<th class="os_col text-center os_solaris"><a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/Solaris/">Solaris</a></th>
 						{/if}
 
 						{if $os_count.darwin}
-						<th class="os_col text-center os_darwin"><a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/?action=show_tests&amp;filter=Darwin">Darwin</a></th>
+						<th class="os_col text-center os_darwin"><a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/Darwin/">Darwin</a></th>
 						{/if}
 
 						{if $os_count.windows}
-						<th class="os_col text-center os_windows"><a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/?action=show_tests&amp;filter=Windows">Windows</a></th>
+						<th class="os_col text-center os_windows"><a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/Windows/">Windows</a></th>
 						{/if}
 					</tr>
 				</thead>
 				<tbody class="table-group-divider">
 				{foreach $results as $pv => $x}
 					<tr>
-						<td class=""><a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/?action=show_tests&amp;filter={$pv}">{$pv}</a></td>
+						<td class=""><a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/{$pv}/">{$pv}</a></td>
 						{if $os_count.linux}
 						<td class="text-center os_linux">
-							<a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/?action=show_tests&amp;filter={$pv};Linux">
+							<a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/{$pv};Linux/">
 							<div class="d-flex">
 								{if $x.linux.PASS}<div class="status_pass" style="width: {$x.linux.PASS}%">&nbsp;</div>{/if}
 								{if $x.linux.FAIL}<div class="status_fail" style="width: {$x.linux.FAIL}%">&nbsp;</div>{/if}
@@ -86,7 +86,7 @@
 						{/if}
 						{if $os_count.bsd}
 						<td class="text-center os_bsd">
-							<a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/?action=show_tests&amp;filter={$pv};BSD">
+							<a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/{$pv};BSD/">
 							<div class="d-flex">
 								{if $x.bsd.PASS}<div class="status_pass" style="width: {$x.bsd.PASS}%">&nbsp;</div>{/if}
 								{if $x.bsd.FAIL}<div class="status_fail" style="width: {$x.bsd.FAIL}%">&nbsp;</div>{/if}
@@ -98,7 +98,7 @@
 						{/if}
 						{if $os_count.solaris}
 						<td class="text-center os_solaris">
-							<a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/?action=show_tests&amp;filter={$pv};solaris">
+							<a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/{$pv};Solaris/">
 							<div class="d-flex">
 								{if $x.solaris.PASS}<div class="status_pass" style="width: {$x.solaris.PASS}%">&nbsp;</div>{/if}
 								{if $x.solaris.FAIL}<div class="status_fail" style="width: {$x.solaris.FAIL}%">&nbsp;</div>{/if}
@@ -110,7 +110,7 @@
 						{/if}
 						{if $os_count.darwin}
 						<td class="text-center os_darwin">
-							<a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/?action=show_tests&amp;filter={$pv};Darwin">
+							<a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/{$pv};Darwin/">
 							<div class="d-flex">
 								{if $x.darwin.PASS}<div class="status_pass" style="width: {$x.darwin.PASS}%">&nbsp;</div>{/if}
 								{if $x.darwin.FAIL}<div class="status_fail" style="width: {$x.darwin.FAIL}%">&nbsp;</div>{/if}
@@ -122,7 +122,7 @@
 						{/if}
 						{if $os_count.windows}
 						<td class="text-center os_windows">
-							<a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/?action=show_tests&amp;filter={$pv};Windows">
+							<a class="text-decoration-none" href="/dist/{$dist}/{$dist_ver}/{$pv};Windows/">
 							<div class="d-flex">
 								{if $x.windows.PASS}<div class="status_pass" style="width: {$x.windows.PASS}%">&nbsp;</div>{/if}
 								{if $x.windows.FAIL}<div class="status_fail" style="width: {$x.windows.FAIL}%">&nbsp;</div>{/if}
@@ -139,10 +139,10 @@
 
 			<p class="mb-0"><b>Key:</b></p>
 			<div class="d-flex text-center fw-bold mb-3">
-				<a class="w-100 text-decoration-none" href="/dist/{$dist}/{$dist_ver}/?action=show_tests&amp;filter=\bPASS\b"><div class="status_pass">Pass: {$grade_count.PASS}</div></a>
-				<a class="w-100 text-decoration-none" href="/dist/{$dist}/{$dist_ver}/?action=show_tests&amp;filter=\bFAIL\b"><div class="status_fail ms-1">Fail: {$grade_count.FAIL}</div></a>
-				<a class="w-100 text-decoration-none" href="/dist/{$dist}/{$dist_ver}/?action=show_tests&amp;filter=\bNA\b"><div class="status_na ms-1">N/A: {$grade_count.NA}</div></a>
-				<a class="w-100 text-decoration-none" href="/dist/{$dist}/{$dist_ver}/?action=show_tests&amp;filter=\bUNKNOWN\b"><div class="status_unknown ms-1">Unknown: {$grade_count.UNKNOWN}</div></a>
+				<a class="w-100 text-decoration-none" href="/dist/{$dist}/{$dist_ver}/PASS/"><div class="status_pass">Pass: {$grade_count.PASS}</div></a>
+				<a class="w-100 text-decoration-none" href="/dist/{$dist}/{$dist_ver}/FAIL/"><div class="status_fail ms-1">Fail: {$grade_count.FAIL}</div></a>
+				<a class="w-100 text-decoration-none" href="/dist/{$dist}/{$dist_ver}/NA/"><div class="status_na ms-1">N/A: {$grade_count.NA}</div></a>
+				<a class="w-100 text-decoration-none" href="/dist/{$dist}/{$dist_ver}/UNKNOWN/"><div class="status_unknown ms-1">Unknown: {$grade_count.UNKNOWN}</div></a>
 			</div>
 
 			<div class="row mb-3">
