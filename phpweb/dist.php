@@ -84,6 +84,7 @@ $s->assign('page_ms', $ms);
 
 if ($debug) {
 	$s->assign('debug_output', k($s->tpl_vars, KRUMO_RETURN));
+	$s->assign('query_summary', $dbq->query_summary());
 } elseif ($json) {
 	send_json($s->tpl_vars);
 }
