@@ -272,12 +272,12 @@ function get_uri_parts($uri = "") {
 		$uri = $_SERVER['REQUEST_URI'] ?? "";
 	}
 
+	// Sometimes GET stuff gets mixed the URI in so we filter out
+	// anything after a '?'
+	$uri = preg_replace("/\?.+/", "", $uri);
+
 	// Break apart the the URI at the '/` boundaries
 	$parts = preg_split('/\//', $uri, 0, PREG_SPLIT_NO_EMPTY);
-
-	// Sometimes GET stuff gets mixed the URI in so we filter out
-	// anything that starts with a '?'
-	$parts = preg_grep("/^\?/", $parts, PREG_GREP_INVERT);
 
 	return $parts;
 }
