@@ -1,0 +1,4 @@
+# Deny all web access to this directory
+<IfModule mod_authz_core.c>
+	Require all denied
+</IfModule>
