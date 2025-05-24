@@ -8,7 +8,7 @@ function db_init() {
 		error_out("Unable to read DB credentials from <code>$ini_file</code>", 98573);
 	}
 
-	$x   = parse_ini_file("/home/bakers/db/magpie.ini", true);
+	$x   = parse_ini_file($ini_file, true);
 	$dsn = "pgsql:host={$x['db']['host']};port={$x['db']['port']};dbname={$x['db']['dbname']}";
 	$dbq = new DBQuery($dsn, $x['db']['username'], $x['db']['password']);
 
