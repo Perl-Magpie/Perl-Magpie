@@ -9,7 +9,7 @@ $version = $_GET['version'] ?? "";
 $time    = $_GET['time']    ?? 0;
 $json    = $_GET['json']    ?? 0;
 $action  = $_GET['action']  ?? "";
-$filter  = $_GET['filter']  ?? "";
+$filter  = $_GET['filter']  ?? null;
 
 // Build the URI link for the JSON API
 $uri = $_SERVER['REQUEST_URI'] ?? "";
@@ -25,7 +25,7 @@ if (!$dist) {
 
 	$dist    = $parts[1] ?? "";
 	$version = $parts[2] ?? "";
-	$filter  = $parts[3] ?? "";
+	$filter  = $filter ?? $parts[3] ?? "";
 
 	// If the URI is: /dist/Foo-Bar/v0.1.2/Linux
 	if ($filter) {
