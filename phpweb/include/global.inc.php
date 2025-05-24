@@ -1,8 +1,8 @@
 <?php
 
 function db_init() {
-	// FIXME: This should not be hardcoded
-	$ini_file = "/home/bakers/db/magpie.ini";
+	global $BASE_DIR;
+	$ini_file = "$BASE_DIR/include/magpie.config.ini";
 
 	if (!is_readable($ini_file)) {
 		error_out("Unable to read DB credentials from <code>$ini_file</code>", 98573);
