@@ -15,6 +15,11 @@ if (!$str) {
 // Allow searching for Foo::Bar and Foo-Bar
 $str = preg_replace("/::/", "-", $str);
 
+if (is_uuid($str)) {
+	header("Location: /results/$str");
+	exit;
+}
+
 ////////////////////////////////////////////////////////
 
 $x       = get_all_dists();
