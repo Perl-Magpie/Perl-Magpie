@@ -156,8 +156,12 @@ function get_test_info($uuid) {
 
 		// If we have valid data we should cache it
 		if ($x) {
-			$ret['text_report'] = $x['result']['output']['uncategorized'] ?? "";
+			$txt_body           = $x['result']['output']['uncategorized'] ?? "";
+			$ret['text_report'] = $txt_body;
 			$ok                 = $GLOBALS['mc']->set($ckey, $ret, 86400);
+
+			// Save the test to the DB
+			write_test_to_db($uuid, $txt_body);
 		} else {
 			error_out("Unable to fetch test $uuid from CPT", 57202);
 		}
