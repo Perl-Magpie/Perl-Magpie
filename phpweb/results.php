@@ -246,4 +246,34 @@ function http_get_with_timeout(string $url, int $timeout, &$curl_errno, &$http_c
 	return $response;
 }
 
+// Fetch test information via API
+function fetch_test_info_from_cpt($uuid) {
+	$start = microtime(1);
+	$url   = "http://api.cpantesters.org/v3/report/$uuid";
+	$ckey  = "cptraw:$uuid";
+
+	if ($data = $GLOBALS['mc']->get($ckey)) {
+		$data['x_from_cache'] = true;
+		return $data;
+	};
+
+	$curl_errno = 0;
+	$http_code  = 0;
+
+	$json = http_get_with_timeout($url, 2, $curl_errno, $http_code);
+	$ms   = intval((microtime(1) - $start) * 1000);
+	$ret  = @json_decode($json, true);
+
+	// If we got valid JSON and the HTTP code is in the 2xx range
+	$is_ok = !is_null($ret) && ($http_code >= 200 && $http_code < 300);
+
+	if ($is_ok) {
+		$ok  = $GLOBALS['mc']->set($ckey, $ret, time() + 86400);
+	} else {
+		$ret = null;
+	}
+
+	return $ret;
+}
+
 // vim: tabstop=4 shiftwidth=4 noexpandtab autoindent softtabstop=4
