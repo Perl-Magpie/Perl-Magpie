@@ -150,60 +150,21 @@ function get_test_info($uuid) {
 	// Remove the stream from the object
 	unset($ret['txt_zstd']);
 
-	// This may get changed if we have to fetch the results from CPT
-	$ok = true;
-
 	// If we don't have the text report in the DB we fetch it via HTTP from CPT
 	if (!$ret['text_report']) {
-		$ret['text_report'] = fetch_test_body_from_cpt($uuid, $ok);
+		$x = fetch_test_info_from_cpt($uuid);
+
+		// If we have valid data we should cache it
+		if ($x) {
+			kd($x);
+			$ret['text_report'] = $x['result']['output']['uncategorized'] ?? "";
+			$ok                 = $GLOBALS['mc']->set($ckey, $ret, 86400);
+		} else {
+			$ret['text_report'] = "";
+		}
 	}
 
 	$ret['x_from_cache'] = false;
-
-	// If we have valid data we should cache it
-	if ($ok) {
-		$data = $GLOBALS['mc']->set($ckey, $ret, 86400);
-	}
-
-	return $ret;
-}
-
-// Fetch test information via API
-function fetch_test_body_from_cpt($uuid, &$ok) {
-	$start = microtime(1);
-	$url   = "http://api.cpantesters.org/v3/report/$uuid";
-
-	$ckey = "uuidj:$uuid";
-	$json = $GLOBALS['mc']->get($ckey);
-
-	if ($json) {
-		$x   = json_decode($json, true);
-		$ret = $x['result']['output']['uncategorized'];
-	} else {
-		$curl_errno = 0;
-		$http_code  = 0;
-
-		$json = http_get_with_timeout($url, 2, $curl_errno, $http_code);
-		$ms   = intval((microtime(1) - $start) * 1000);
-
-		$x   = json_decode($json, true);
-		$ret = $x['result']['output']['uncategorized'] ?? "";
-
-		if ($curl_errno == 28) {
-			$ok  = false;
-			$ret = "Timeout fetching $uuid from CPT after $ms ms";
-			mplog($ret);
-		} elseif ($http_code != 200) {
-			$ok  = false;
-			$ret = "Non-OK HTTP code ($http_code) fetching $uuid from CPT";
-			mplog($ret);
-		} else {
-			mplog("Fetched $uuid from CPT API in $ms ms");
-			$write_ok = write_test_to_db($uuid, $ret);
-			$json     = $GLOBALS['mc']->set($ckey, $json);
-			$ok       = true;
-		}
-	}
 
 	return $ret;
 }
