@@ -159,7 +159,7 @@ function get_test_info($uuid) {
 			$ret['text_report'] = $x['result']['output']['uncategorized'] ?? "";
 			$ok                 = $GLOBALS['mc']->set($ckey, $ret, 86400);
 		} else {
-			$ret['text_report'] = "";
+			error_out("Unable to fetch test $uuid from CPT", 57202);
 		}
 	}
 
