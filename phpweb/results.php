@@ -156,7 +156,6 @@ function get_test_info($uuid) {
 
 		// If we have valid data we should cache it
 		if ($x) {
-			kd($x);
 			$ret['text_report'] = $x['result']['output']['uncategorized'] ?? "";
 			$ok                 = $GLOBALS['mc']->set($ckey, $ret, 86400);
 		} else {
