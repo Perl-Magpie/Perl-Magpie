@@ -47,6 +47,8 @@ print $s->fetch("tpls/search.stpl");
 function filter_results($all, $filter) {
 	if (!$filter) { return []; }
 
+	$filter = preg_quote($filter);
+
 	// Filter the big list down to the matches
 	$ret = preg_grep("/$filter/i", $all);
 
