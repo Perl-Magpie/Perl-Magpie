@@ -24,7 +24,8 @@ if (!$dist) {
 
 	$dist    = $parts[1] ?? "";
 	$version = $parts[2] ?? "";
-	$filter  = $filter ?? $parts[3] ?? "";
+	$filter  = $filter   ?? $parts[3] ?? "";
+	$filter  = urldecode($filter);
 
 	// If the URI is: /dist/Foo-Bar/v0.1.2/Linux
 	if ($filter) {
