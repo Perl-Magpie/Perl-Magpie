@@ -1,5 +1,36 @@
 <?php
 
+//check_valid();
+
+function check_valid() {
+	$ip    = $_SERVER['REMOTE_ADDR']     ?? "";
+	$agent = $_SERVER['HTTP_USER_AGENT'] ?? "";
+
+	$block_file = "/tmp/block.txt";
+	if (is_readable($block_file)) {
+		$lines = file($block_file);
+
+		foreach ($lines as $line) {
+			$line = trim($line);
+
+			if (preg_match("/$line/", $ip)) {
+				teapot();
+			}
+		}
+	}
+
+}
+
+function teapot() {
+	//http_response_code(418);
+	//print "<h1>#418: Sorry... I am a teapot</h1>";
+
+	http_response_code(429);
+	print "<h1>#429: Too Many Requests";
+
+	die;
+}
+
 function db_init() {
 	global $BASE_DIR;
 	$ini_file = "$BASE_DIR/include/magpie.config.ini";
