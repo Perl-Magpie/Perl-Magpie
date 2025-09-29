@@ -30,12 +30,15 @@ print $s->fetch("tpls/index.stpl");
 function get_stats() {
 	global $mc;
 
+	// Allow me to pass in `?use_cache=0` to disable the cache temporarily
+	$use_cache = $_GET['use_cache'] ?? 1;
+
 	// TopX tables are lighter and don't need to be cached as long
 	$ckey = 'index_stats_topx';
 	$topx = $mc->get($ckey);
 	$ret  = [];
 
-	if ($topx) {
+	if ($use_cache && $topx) {
 		$ret = array_merge($ret, $topx);
 	} else {
 		$ret["last_hour"] = get_top_x(10, time() - 3600);
@@ -52,7 +55,7 @@ function get_stats() {
 	$ckey = 'index_stats_counts';
 	$cnts = $mc->get($ckey);
 
-	if ($cnts) {
+	if ($use_cache && $cnts) {
 		$ret = array_merge($ret, $cnts);
 	} else {
 		$ret['count_hour']  = get_count(time() - 3600         , time());
