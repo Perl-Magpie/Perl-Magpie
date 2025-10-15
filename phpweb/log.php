@@ -34,6 +34,17 @@ print $s->fetch("tpls/log.stpl");
 function get_log($count, $offset, $grade) {
 	global $dbq;
 
+	// If the grade string starts with a ! that means we invert the results
+	// to only show the ones that DO NOT match the filter
+	//
+	// Note: This is all items or nothing
+	if (str_starts_with($grade, "!")) {
+		$grade  = substr($grade, 1);
+		$invert = true;
+	} else {
+		$invert = false;
+	}
+
 	// Split at the commas and only get non-empty ones
 	$grade = preg_split("/,/", $grade, 0, PREG_SPLIT_NO_EMPTY);
 
@@ -44,7 +55,12 @@ function get_log($count, $offset, $grade) {
 		}
 
 		$grade_str = join(",", $grade);
-		$filter    = "WHERE grade IN ($grade_str)";
+
+		if ($invert) {
+			$filter = "WHERE grade NOT IN ($grade_str)";
+		} else {
+			$filter = "WHERE grade IN ($grade_str)";
+		}
 	} else {
 		$filter = "";
 	}
