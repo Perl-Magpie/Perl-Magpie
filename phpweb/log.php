@@ -13,8 +13,7 @@ if ($count > 10000) { die; }
 ////////////////////////////////////////////////////////
 
 $grade = $_GET['grade'] ?? '';
-
-$log = get_log($count, $offset, $grade);
+$log   = get_log($count, $offset, $grade);
 
 $ms = intval(sw());
 $s->assign('page_ms', $ms);
@@ -35,9 +34,17 @@ print $s->fetch("tpls/log.stpl");
 function get_log($count, $offset, $grade) {
 	global $dbq;
 
+	// Split at the commas and only get non-empty ones
+	$grade = preg_split("/,/", $grade, 0, PREG_SPLIT_NO_EMPTY);
+
 	if ($grade) {
-		$grade_str = $dbq->dbh->quote($grade);
-		$filter    = "WHERE grade = $grade_str";
+		// preg_quote() each item
+		foreach ($grade as &$x) {
+			$x = $dbq->dbh->quote($x);
+		}
+
+		$grade_str = join(",", $grade);
+		$filter    = "WHERE grade IN ($grade_str)";
 	} else {
 		$filter = "";
 	}
