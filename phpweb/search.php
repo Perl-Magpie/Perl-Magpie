@@ -96,7 +96,7 @@ function get_all_dists() {
 		$ret = $data;
 	}
 
-	$mc->set($ckey, $ret, 7200);
+	$mc->set($ckey, $ret, 900);
 
 	return $ret;
 }
