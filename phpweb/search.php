@@ -85,7 +85,12 @@ function get_all_dists() {
 	global $dbq, $mc;
 
 	$ckey = "all_modules";
-	$data = $mc->get($ckey);
+
+	if (!empty($_GET['no_cache'])) {
+		$data = [];
+	} else {
+		$data = $mc->get($ckey);
+	}
 
 	// Items are in the DB with `-` separator
 	// Find all the entries in the DB that match
