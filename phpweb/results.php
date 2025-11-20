@@ -61,9 +61,9 @@ function write_test_to_db($uuid, $test_str, $obj) {
 	$zstd_str   = zstd_compress_dict($test_str, $dict, $zstd_level);
 	$len        = strlen($zstd_str);
 
-	$grade = strtoupper($obj['grade']                ?? "");
-	$dist  = strtoupper($obj['distribution_name']    ?? "");
-	$distv = strtoupper($obj['distribution_version'] ?? "");
+	$grade = strtoupper($obj['grade']     ?? "");
+	$dist  = $obj['distribution_name']    ?? "";
+	$distv = $obj['distribution_version'] ?? "";
 
 	mplog("Wrote $len bytes ($len_orig) to DB for $uuid $dist/$distv ($grade)");
 
