@@ -44,7 +44,7 @@ print $s->fetch("tpls/results.stpl");
 ////////////////////////////////////////////////////////
 
 // Write the zstd compressed test to the DB
-function write_test_to_db($uuid, $test_str) {
+function write_test_to_db($uuid, $test_str, $obj) {
 	global $dbq;
 
 	$dict_file = $GLOBALS['ZSTD_DICT'];
@@ -61,7 +61,11 @@ function write_test_to_db($uuid, $test_str) {
 	$zstd_str   = zstd_compress_dict($test_str, $dict, $zstd_level);
 	$len        = strlen($zstd_str);
 
-	mplog("Wrote $len bytes ($len_orig) to DB for $uuid");
+	$grade = strtoupper($obj['grade']                ?? "");
+	$dist  = strtoupper($obj['distribution_name']    ?? "");
+	$distv = strtoupper($obj['distribution_version'] ?? "");
+
+	mplog("Wrote $len bytes ($len_orig) to DB for $uuid $dist/$distv ($grade)");
 
 	$sql = "INSERT INTO test_results (guid, txt_zstd, dict_id) VALUES (:uuid, :data, :dict_id);";
 	$sth = $dbq->dbh->prepare($sql);
@@ -152,7 +156,8 @@ function get_test_info($uuid) {
 
 	// If we don't have the text report in the DB we fetch it via HTTP from CPT
 	if (!$ret['text_report']) {
-		$x = fetch_test_info_from_cpt($uuid);
+		$grade = strtoupper($ret['grade'] ?? "");
+		$x     = fetch_test_info_from_cpt($uuid);
 
 		// If we have valid data we should cache it
 		if ($x) {
@@ -161,7 +166,7 @@ function get_test_info($uuid) {
 			$ok                 = $GLOBALS['mc']->set($ckey, $ret, 86400);
 
 			// Save the test to the DB
-			write_test_to_db($uuid, $txt_body);
+			write_test_to_db($uuid, $txt_body, $ret);
 		} else {
 			error_out("Unable to fetch test $uuid from CPT", 57202);
 		}
