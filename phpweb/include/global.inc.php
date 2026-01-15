@@ -313,6 +313,138 @@ function get_uri_parts($uri = "") {
 	return $parts;
 }
 
+function get_tester_uuid($name) {
+	global $dbq;
+
+	$sql = "SELECT uuid FROM tester WHERE name = ?;";
+	$x   = $dbq->query($sql, [$name], 'one_data');
+
+	# If we have it already return it
+	if ($x) { return $x; }
+
+	# Add a new user and return the UUID
+	$uuid = add_tester($name);
+
+	return $uuid;
+}
+
+function add_tester($name) {
+	global $dbq;
+
+	$uuid = uuidv7();
+
+	$sql = "INSERT INTO tester (uuid, login, name, email) VALUES (?,?,?,?) RETURNING uuid;";
+	$ok  = $dbq->query($sql, [$uuid, null, $name, null]);
+
+	if ($ok) {
+		mplog("Added tester: $name => $uuid");
+		return $uuid;
+	} else {
+		mplog("Error adding tester: $name");
+		return null;
+	}
+}
+
+function uuidv7() {
+    $bytes = random_bytes(16);
+
+    $ts = (int) floor(microtime(true) * 1000);
+
+    // 48-bit timestamp, big-endian
+    $bytes[0] = chr(($ts >> 40) & 0xff);
+    $bytes[1] = chr(($ts >> 32) & 0xff);
+    $bytes[2] = chr(($ts >> 24) & 0xff);
+    $bytes[3] = chr(($ts >> 16) & 0xff);
+    $bytes[4] = chr(($ts >> 8) & 0xff);
+    $bytes[5] = chr($ts & 0xff);
+
+    // version 7
+    $bytes[6] = chr((ord($bytes[6]) & 0x0f) | 0x70);
+
+    // RFC 4122 variant
+    $bytes[8] = chr((ord($bytes[8]) & 0x3f) | 0x80);
+
+    $hex = bin2hex($bytes);
+
+    $ret = sprintf(
+        '%s-%s-%s-%s-%s',
+        substr($hex, 0, 8),
+        substr($hex, 8, 4),
+        substr($hex, 12, 4),
+        substr($hex, 16, 4),
+        substr($hex, 20, 12)
+    );
+
+	return $ret;
+}
+
+function get_distribution_id($dist_name, $dist_version) {
+	global $dbq;
+
+	$sql = "SELECT distribution_id FROM distribution_info WHERE distribution_name = ? AND distribution_version = ?;";
+    $x   = $dbq->query($sql, [$dist_name, $dist_version], 'one_data');
+
+    # If we have it already return it
+    if ($x) { return $x; }
+
+    # Add a new user and return the UUID
+    $id = add_distribution($dist_name, $dist_version);
+
+	return $id;
+}
+
+function add_distribution($name, $ver) {
+	global $dbq;
+
+    $sql = "INSERT INTO distribution_info (distribution_name, distribution_version) VALUES (?,?);";
+    $id  = $dbq->query($sql, [$name, $ver]);
+
+    if ($id) {
+        mplog("Added dist: $name/$ver => $id");
+        return $id;
+    } else {
+        mplog("Error adding dist: $name/$ver");
+        return null;
+    }
+}
+
+function get_arch_id($str) {
+	global $dbq;
+
+    $str = trim($str);
+
+    if (!$str) {
+        die("Unknown arch? '$str'");
+    }
+
+    $sql = "SELECT arch_id FROM os_arch WHERE arch_name = ?;";
+    $x   = $dbq->query($sql, [$str], "one_data");
+
+    # If we have it already return it
+    if ($x) { return $x; }
+
+    # Add a new user and return the UUID
+    $id = add_arch($str);
+
+    return $id;
+}
+
+function add_arch($name) {
+	global $dbq;
+
+	$name = trim($name);
+	$sql  = "INSERT INTO os_arch (arch_name) VALUES (?);";
+	$id   = $dbq->query($sql, [$name]);
+
+	if ($id) {
+		mplog("Added arch $name => $id");
+		return $id;
+	} else {
+		mplog("Unable to add arch $name");
+		return NULL;
+	}
+}
+
 // Write the zstd compressed test to the DB
 function write_test_to_db($uuid, $test_str, $obj) {
 	global $dbq;
