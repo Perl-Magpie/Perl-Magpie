@@ -313,4 +313,41 @@ function get_uri_parts($uri = "") {
 	return $parts;
 }
 
+// Write the zstd compressed test to the DB
+function write_test_to_db($uuid, $test_str, $obj) {
+	global $dbq;
+
+	$dict_file = $GLOBALS['ZSTD_DICT'];
+	$sql       = "SELECT dict_id FROM dict_info WHERE dict_file = ?;";
+	$dict_id   = $dbq->query($sql, [basename($dict_file)], 'one_data');
+
+	if (!$dict_id) {
+		error_out("Could not find info in dict_info for $dict_file", 65902);
+	}
+
+	$zstd_level = 12; // ZSTD compression level
+	$len_orig   = strlen($test_str);
+	$dict       = file_get_contents($dict_file);
+	$zstd_str   = zstd_compress_dict($test_str, $dict, $zstd_level);
+	$len        = strlen($zstd_str);
+
+	$grade = strtoupper($obj['grade']     ?? "");
+	$dist  = $obj['distribution_name']    ?? "";
+	$distv = $obj['distribution_version'] ?? "";
+
+	mplog("Wrote $len bytes ($len_orig) to DB for $uuid $dist/$distv ($grade)");
+
+	$sql = "INSERT INTO test_results (guid, txt_zstd, dict_id) VALUES (:uuid, :data, :dict_id);";
+	$sth = $dbq->dbh->prepare($sql);
+
+	$sth->bindParam(':uuid'   , $uuid    , PDO::PARAM_STR);
+	$sth->bindParam(':data'   , $zstd_str, PDO::PARAM_LOB); // Use LOB for bytea
+	$sth->bindParam(':dict_id', $dict_id , PDO::PARAM_STR);
+
+	$sth->execute();
+
+	return 1;
+}
+
+
 // vim: tabstop=4 shiftwidth=4 noexpandtab autoindent softtabstop=4
