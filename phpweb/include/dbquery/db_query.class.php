@@ -395,8 +395,8 @@ class DBQuery {
 		if (isset($i[1])) { $num = 1; } // Called from my external class
 		else { $num = 0; } // Called direct
 
-		$info['called_from_file'] = $i[$num]['file'];
-		$info['called_from_line'] = $i[$num]['line'];
+		$info['called_from_file'] = $i[$num]['file'] ?? "";
+		$info['called_from_line'] = $i[$num]['line'] ?? "";
 		$this->db_query_info[]    = $info;
 
 		// Log to a file if need be
