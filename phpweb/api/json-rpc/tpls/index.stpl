@@ -7,17 +7,28 @@
 		<link href="/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 		<link href="/css/dist.css" rel="stylesheet">
 	</head>
-	<body class="container-lg">
-		<h1>Magpie API</h1>
 
-		<p>
-		Magpie offers a JSON-RPC API. The following methods are available:
-		</p>
+	<body class="">
+		<h1 class="border-bottom mx-0 px-3 magpie_header pb-2 mb-3">Magpie API</h1>
 
-		<ul>
-			<li><pre>echo_data($scalar);</pre></li>
-			<li><pre>dist.add_test($test_epoch, $test_uuid, $dist_name, $dist_version, $tester_name, $grade, $perl_version, $os_name, $os_version);</pre></li>
-			<li><pre>math.pi();</pre></li>
-		</ul>
+		<div class="container-lg">
+			<p>
+			Magpie offers a JSON-RPC API. The following methods are available:
+			</p>
+
+			<ul>
+				<li><pre>echo_data($scalar);</pre></li>
+					<li><pre>math.pi();</pre></li>
+						<li><pre>dist.add_test($test_epoch, $test_uuid, $dist_name, $dist_version, $tester_name, $grade, $perl_version, $os_name, $os_version);</pre></li>
+			</ul>
+
+			<!--
+
+				Example calls:
+
+				jsonrpc-client.pl --url https://scottchiefbaker.perl-magpie.org/api/json-rpc/ --method dist.add_test --params "1768521720,3d07c2b3-b3f7-4a16-8ca7-acadc3059188,Acme::Foo,v0.45,Scott Baker,PASS,v5.4.32,Linux,x86_64_test,Test Body"
+
+			-->
+		</div>
 	</body>
 </html>

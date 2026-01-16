@@ -20,6 +20,9 @@ $server->echo_data = 'echo_data';
 $server->math      = new math;
 $server->dist      = new dist;
 
+// jsonrpc-client.pl --url https://scottchiefbaker.perl-magpie.org/api/json-rpc/ --method dist.add_test \
+// --params "1768521720,3d07c2b3-b3f7-4a16-8ca7-acadc3059188,Acme::Foo,v0.45,Scott Baker,PASS,v5.4.32,Linux,x86_64_test,Test Body"
+
 // Process any JSON-RPC requests
 $server->handle();
 
