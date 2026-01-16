@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>API</title>
+		<link href="/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+		<link href="/css/dist.css" rel="stylesheet">
+	</head>
+	<body class="container-lg">
+		<h1>Magpie API</h1>
+
+		<p>
+		Magpie offers a JSON-RPC API. The following methods are available:
+		</p>
+
+		<ul>
+			<li><pre>echo_data($scalar);</pre></li>
+			<li><pre>dist.add_test($test_epoch, $test_uuid, $dist_name, $dist_version, $tester_name, $grade, $perl_version, $os_name, $os_version);</pre></li>
+			<li><pre>math.pi();</pre></li>
+		</ul>
+	</body>
+</html>
