@@ -39,7 +39,7 @@ function get_stats() {
 	$ret  = [];
 
 	if ($use_cache && $topx) {
-		$ret = array_merge($ret, $topx);
+		$ret = $topx;
 	} else {
 		$ret["last_hour"] = get_top_x(10, time() - 3600);
 		$ret["last_day"]  = get_top_x(10, time() - 86400);
