@@ -13,6 +13,7 @@ $agents = [
 	'SemrushBot',
 	'Claude-SearchBot',
 	'SERankingBacklinksBot',
+	'meta-webindexer',
 ];
 
 // Comment/uncomment this to do rate limit processing
