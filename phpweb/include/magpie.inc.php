@@ -12,7 +12,7 @@ require("$BASE_DIR/include/krumo/class.krumo.php");
 require("$BASE_DIR/include/dbquery/db_query.class.php");
 ////////////////////////////////////////////////////////////////////////////////
 require("$BASE_DIR/include/sluz/sluz.class.php");
-$s   = new sluz();
+$s = new sluz();
 ////////////////////////////////////////////////////////////////////////////////
 require("$BASE_DIR/include/global.inc.php");
 $dbq = db_init();
@@ -24,6 +24,6 @@ $mc->addServer('127.0.0.1', 11211);
 // data set()'s
 $mc->setOption(Memcached::OPT_COMPRESSION, false);
 ////////////////////////////////////////////////////////////////////////////////
-
-# Syslog
+require("$BASE_DIR/bot-rate-limit.php");
+////////////////////////////////////////////////////////////////////////////////
 openlog("MagpieWeb", LOG_PID | LOG_PERROR, LOG_LOCAL7);
