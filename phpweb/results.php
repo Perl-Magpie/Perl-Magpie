@@ -171,11 +171,9 @@ function http_get_with_timeout(string $url, int $timeout, &$curl_errno, &$http_c
 		}
 
 		//k(curl_error($ch), curl_errno($ch), $http_code);
-		curl_close($ch);
 		return $ret;
 	}
 
-	curl_close($ch);
 	return $response;
 }
 
