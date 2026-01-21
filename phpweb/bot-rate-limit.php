@@ -36,7 +36,7 @@ function check_rate_limit($hits_allowed, $time_period, $agents) {
 
 	$debug = intval($_GET['debug'] ?? 0) > 1;
 
-	if ($needs_check && !is_allowed($mc, $ip_addr, $hits_allowed, $time_period, $debug)) {
+	if ($needs_check && !is_allowed($mc, $agent, $hits_allowed, $time_period, $debug)) {
 		http_response_code(429);
 		print "Rate limit exceeded... Check back later";
 
