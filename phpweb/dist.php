@@ -56,6 +56,10 @@ $os_cnt     = get_os_count($results);
 $group      = group_test_results($results);
 $dist_fmt   = str_replace("-", "::", $dist);
 
+if (!$results) {
+	error_out("No results found for distribution $dist", 12823);
+}
+
 $s->assign('dist', $dist);
 $s->assign('dist_fmt', $dist_fmt);
 $s->assign('dist_ver', $version);
