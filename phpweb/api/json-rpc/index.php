@@ -43,6 +43,23 @@ class math {
 
 #[\AllowDynamicProperties]
 class dist {
+	private function error_out(string $msg, int $num) {
+		$msg = trim($msg);
+
+		$obj = [
+			'error_count'   => 1,
+			'error_message' => $msg,
+			'error_num'     => $num,
+		];
+
+		$output = json_encode($obj, JSON_INVALID_UTF8_SUBSTITUTE);
+
+		// http://tools.ietf.org/html/rfc4627
+		header('Content-type: application/json');
+		print $output;
+		exit;
+	}
+
 	public function get_test($uuid) {
 		global $dbq;
 
@@ -60,20 +77,21 @@ class dist {
 
 		$exists = $this->get_test($test_uuid);
 		if ($exists) {
-			$ret = [
-				'error_count'   => 1,
-				'error_message' => "Test '$test_uuid' already in DB",
-				'error_num'     => 48414
-			];
-
-			return $ret;
+			$this->error_out("Test '$test_uuid' already in DB", 19340);
 		}
 
 		$test_time_str = date("Y-m-d H:i:s", $test_epoch);
 		$tester_uuid   = get_tester_uuid($tester_name);
+		$dist_name     = preg_replace("/::/", "-", $dist_name);
 		$dist_id       = get_distribution_id($dist_name, $dist_version);
 		$arch_id       = get_arch_id($os_version);
 		$grade         = strtoupper($grade);
+
+		$allowed_grades = ['PASS', 'FAIL', 'N/A', 'UNKNOWN'];
+		if (!in_array($grade, $allowed_grades)) {
+			$grade_str = join(", ", $allowed_grades);
+			$this->error_out("Invalid grade. Allowed grades: $grade_str", 49190);
+		}
 
 		$sql = "INSERT INTO test (test_ts, guid, tester, grade, perl_version, osname, arch_id, distribution_id)
 			VALUES (?,?,?,?,?,?,?,?);";
@@ -89,17 +107,19 @@ class dist {
 			$dist_id,
 		];
 
+		# This is test metadata
 		$ok = $dbq->query($sql, $obj);
 
-		$obj2 = [
-			'grade'                => $grade,
-			'distribution_name'    => $dist_name,
-			'distribution_version' => $dist_version,
-		];
-
+		# This is the test text results
 		$ok2 = write_test_to_db($test_uuid, $test_body, $obj);
 
-		return $test_uuid;
+		if ($ok && $ok2) {
+			$ret = "https://matrix.perl-magpie.org/results/$test_uuid";
+		} else {
+			$this->error_out("Unknown DB error", 48189);
+		}
+
+		return $ret;
     }
 }
 
