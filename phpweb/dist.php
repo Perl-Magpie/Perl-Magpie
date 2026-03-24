@@ -100,7 +100,10 @@ if ($action === 'show_tests') {
 function get_dist_versions($dist) {
 	global $dbq;
 
-	$sql = "SELECT distinct(distribution_version) as distribution_version FROM distribution_info WHERE distribution_name = ? ORDER BY distribution_version DESC;";
+	$sql = "SELECT distinct(distribution_version) as distribution_version
+		FROM distribution_info
+		WHERE distribution_name = ?
+		ORDER BY distribution_version DESC;";
 	$ret = $dbq->query($sql, [$dist], 'one_column');
 
 	usort($ret, 'version_compare');
