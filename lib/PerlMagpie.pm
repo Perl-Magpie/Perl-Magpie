@@ -31,6 +31,16 @@ get '/dist/:dist_name' => sub {
    };
 };
 
+get '/author/:author_name' => sub {
+   my $author_name = uc route_parameters->get('author_name');
+   my $test_count = db_tests->search({ author => $author_name })->count;
+   send_as html => template 'public/author_summary', {
+      title       => "PerlMagpie Author Summary for $author_name",
+      author_name => $author_name,
+      none_found  => $test_count > 0 ? 0 : 1,
+   };
+};
+
 get '/list' => sub {
    my $q = query_parameters;
    send_as html => template 'public/test_list', {
@@ -45,6 +55,36 @@ get '/list' => sub {
 #
 
 prefix '/api';
+
+get '/author/:author_name' => sub {
+   my $author_name = uc route_parameters->get('author_name');
+
+   my $distributions = [
+      rset('Test')->search(
+         { 'me.author' => $author_name },
+         {
+            select => [
+               'distribution',
+               { SUM => \'CASE WHEN grade = \'PASS\' THEN 1 ELSE 0 END' },
+               { SUM => \'CASE WHEN grade = \'FAIL\' THEN 1 ELSE 0 END' },
+               { SUM => \'CASE WHEN grade = \'NA\' THEN 1 ELSE 0 END' },
+               { SUM => \'CASE WHEN grade = \'UNKNOWN\' THEN 1 ELSE 0 END' },
+               \'COUNT(*)'
+            ],
+            as => [
+               'distribution', 'count_pass', 'count_fail',
+               'count_na', 'count_unknown', 'count_total'
+            ],
+            group_by => ['distribution'],
+            order_by => ['distribution'],
+         }
+      )->hri->all
+   ];
+   send_as JSON => {
+      author        => $author_name,
+      distributions => $distributions,
+   };
+};
 
 get '/dist/:dist_name' => sub {
    my $dist_name = route_parameters->get('dist_name');

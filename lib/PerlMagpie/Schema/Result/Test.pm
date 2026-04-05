@@ -10,6 +10,7 @@ __PACKAGE__->add_columns(
    test_ts      => { data_type => 'timestamp' },
    tester       => { data_type => 'text', is_foreign_key => 1 },
    distribution => { data_type => 'text' },
+   author       => { data_type => 'text', is_nullable => 1 },
    grade        => { data_type => 'text' },
    perl_version => { data_type => 'text'},
    osname       => { data_type => 'text'},
@@ -27,6 +28,7 @@ sub sqlt_deploy_hook {
    $table->add_index( name => 'guid_idx',         fields => ['guid'] );
    $table->add_index( name => 'tester_idx',       fields => ['tester'] );
    $table->add_index( name => 'distribution_idx', fields => ['distribution'] );
+   $table->add_index( name => 'author_idx',       fields => ['author'] );
    $table->add_index( name => 'osname_idx',       fields => ['osname'] );
    $table->add_index( name => 'osversion_idx',    fields => ['osversion'] );
    $table->add_index( name => 'archname_idx',     fields => ['archname'] );
