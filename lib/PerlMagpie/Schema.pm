@@ -9,6 +9,6 @@ __PACKAGE__->load_components(qw/
 __PACKAGE__->load_namespaces( default_resultset_class => 'ResultSet');
 
 our $FIRST_VERSION = '0.001';
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 1;

@@ -24,7 +24,7 @@ post '/submit/CPAN-Testers-Report' => sub {
    my $result = from_json($p);
    my $report = from_json($result->{content})->[0];
    my ($creator) = $report->{metadata}->{core}->{creator} =~ /^.*\:(.*)$/;
-   my ($distro) = $report->{metadata}->{core}->{resource} =~ /.*\/(.*).tar.gz$/;
+   my ($author, $distro) = $report->{metadata}->{core}->{resource} =~ /.*\/([^\/]+)\/(.*).tar.gz$/;
    my $full_report = from_json($report->{content});
 
    my $tester = rset('Tester')->find_or_create({ uuid => $creator });
@@ -34,6 +34,7 @@ post '/submit/CPAN-Testers-Report' => sub {
       test_ts => $report->{metadata}->{core}->{creation_time},
       tester => $tester->id,
       distribution => $distro,
+      author => $author,
       grade => uc $full_report->{grade},
       perl_version => $full_report->{perl_version},
       osname => $full_report->{osname},
