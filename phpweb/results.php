@@ -132,7 +132,7 @@ function get_test_info($uuid) {
 			// Save the test to the DB
 			write_test_to_db($uuid, $txt_body, $ret);
 		} else {
-			error_out("Unable to fetch test $uuid from CPT", 57202);
+			error_out("Test <code>$uuid</code> not cached locally, and we are unable to fetch it from CPT", 57202);
 		}
 	}
 
