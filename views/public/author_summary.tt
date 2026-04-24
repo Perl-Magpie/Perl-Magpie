@@ -1,0 +1,47 @@
+<h1>CPAN Testers Summary: [% author_name %]</h1>
+
+[% IF none_found %]
+<p>No test results found for author [% author_name %].</p>
+[% ELSE %]
+<div id="authorSummary"></div>
+<script>
+$(() => {
+  $.getJSON('/api/author/[% author_name | url %]').done(function(data) {
+    let html = `<table>
+      <thead>
+        <tr>
+          <th>Distribution</th>
+          <th>PASS</th>
+          <th>FAIL</th>
+          <th>UNKNOWN</th>
+          <th>NA</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+    data.distributions.forEach(function(d) {
+      const dist = d.distribution;
+      const distEnc = encodeURIComponent(dist);
+      const pass    = +d.count_pass    || 0;
+      const fail    = +d.count_fail    || 0;
+      const unknown = +d.count_unknown || 0;
+      const na      = +d.count_na      || 0;
+      const total   = +d.count_total   || 0;
+
+      html += `<tr>
+        <td><a href="/dist/${distEnc}">${dist}</a></td>
+        <td><a href="/list?dist=${distEnc}&grade=PASS">${pass}</a></td>
+        <td><a href="/list?dist=${distEnc}&grade=FAIL">${fail}</a></td>
+        <td><a href="/list?dist=${distEnc}&grade=UNKNOWN">${unknown}</a></td>
+        <td><a href="/list?dist=${distEnc}&grade=NA">${na}</a></td>
+        <td>${total}</td>
+      </tr>`;
+    });
+
+    html += `</tbody></table>`;
+    $("#authorSummary").html(html);
+  });
+});
+</script>
+[% END %]
